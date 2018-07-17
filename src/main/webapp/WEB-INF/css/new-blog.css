@@ -1,0 +1,59 @@
+.blod-editor-containe
+{
+    font-size: 1rem;
+}
+
+.title-div
+{
+    width: 90%;
+    display: table;
+    margin: 1rem auto 0.6rem auto;
+}
+
+.title-span {
+    display: table-cell;
+    width: 4%;
+    font-size: 1.7rem;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.title-input
+{
+    width: 80%;
+    display: table-cell !important;
+}
+
+.category-div
+{
+    width: 90%;
+    display: table;
+    margin: 1rem auto 0.6rem auto;
+}
+
+
+.category-span
+{
+    display: table-cell;
+    width: 3%;
+    font-size: 1.7rem;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.category-form
+{
+    display: inline-block !important;
+    margin-left: 1.8rem;
+    margin-bottom: 0 !important;
+}
+
+.submit-div {
+    margin: 1rem auto 8% auto;
+    width: 90%;
+}
+
+.submit-btn
+{
+    width:5%;
+}

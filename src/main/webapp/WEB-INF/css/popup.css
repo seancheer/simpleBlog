@@ -1,0 +1,49 @@
+
+@keyframes popup-showup
+{
+from {top:0px;}
+to {top:5%;}
+}
+
+@-moz-keyframes popup-showup /* Firefox */
+{
+from {top:0px;}
+to {top:5%;}
+}
+
+@-webkit-keyframes popup-showup /* Safari 和 Chrome */
+{
+from {top:0px;}
+to {top:5%;}
+}
+
+@-o-keyframes popup-showup /* Opera */
+{
+from {top:0px;}
+to {top:5%;}
+}
+
+
+
+
+.popup-container {
+    position: absolute;
+    left: 47%;
+    top: 5%;
+    background-color: #CC3333; /*error: #CC3333*/
+    color: #fff;
+    display: inline-block;
+    z-index: 9999;
+    border-radius: 0.4rem;
+    padding: 5px 20px 5px 20px;
+    box-shadow: 0px 0px 5px #CC3333;
+    display: none;
+    }
+    
+    
+    
+.popup-content
+{
+    display: inline-block;
+    font-size: 1.3rem;
+}

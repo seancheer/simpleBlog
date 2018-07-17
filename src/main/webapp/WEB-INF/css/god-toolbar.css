@@ -1,0 +1,29 @@
+.god-toolbar
+{
+    padding: 1px 2px 12px 1px;
+    border-bottom: #ccc 1px dashed;
+    font-size: 1.2rem;
+}
+
+.god-toolbar > span{
+    padding:0px 2px 0px 0px;
+}
+
+.god-toolbar > a{
+    padding:0px 2px 0px 0px;
+}
+
+
+.new-blog-container {
+    padding: 1rem 1rem 1rem 1rem;
+    width: 40%;
+    background-color: #91caf5;
+    border-color: #333333;
+    text-align: center;
+    border-radius: 0.5rem;
+}
+
+.new-blog-container > a{
+    font-size: 2rem;
+    color: #fff;
+}

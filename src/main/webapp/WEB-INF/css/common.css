@@ -1,0 +1,27 @@
+
+
+.vertical-center {
+    margin: 10% 0 10% 40%;
+}
+
+.pwd-container {
+    color: #000;
+}
+
+.pwd-input-container {
+    display: inline-block;
+    width: 30%;
+}
+
+.pwd-input-container input{
+    /* width: 100%;
+    height: 100%; 设置为100%在chrome里面会不正常，原因未知。*/
+}
+
+
+.enter-container {
+    display: inline-block;
+    width: 10%;
+    margin-left: 1rem;
+}
+
