@@ -76,6 +76,11 @@ public class EditServiceImpl extends BaseController implements IEditService {
 	private JSONObject createNewBlogInternal(JSONObject blogData, HttpServletRequest request,
 			HttpServletResponse response) {
 		String blogTitle = blogData.getString(BlogConstants.NEW_BLOG_KEY_TITLE);
+		if (StringUtils.isEmpty(blogTitle) || blogTitle.length() >= BlogConstants.MAX_BLOGTITLE_LENGTH) {
+			logger.debug("Invalid blogtitle!");
+			return ErrorCode.INVALID_BLOG_TITLE.toJson();
+		}
+
 		String blogContent = blogData.getString(BlogConstants.NEW_BLOG_KEY_CONTENT);
 		int category1 = Integer.parseInt(blogData.getString(BlogConstants.NEW_BLOG_CATEGORY_0));
 		int category2 = Integer.parseInt(blogData.getString(BlogConstants.NEW_BLOG_CATEGORY_1));
@@ -165,23 +170,23 @@ public class EditServiceImpl extends BaseController implements IEditService {
 
 		return true;
 	}
-	
+
 	/**
 	 * 编辑blog的页面
 	 */
 	@Override
 	public ModelAndView editBlog(HttpServletResponse response, HttpSession session, Integer blogId) {
 		Passage passage = null;
-		
+
 		try {
 			passage = passageDao.queryRecordById(blogId);
 		} catch (BlogBaseException e) {
 			logger.error("Query passage failed! blogId:" + blogId);
 			return redirect500View();
 		}
-		
+
 		ModelAndView modelAndView = new ModelAndView();
-		modelAndView.addObject("passage",passage);
+		modelAndView.addObject("passage", passage);
 		return null;
 	}
 

@@ -6,6 +6,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -76,10 +77,11 @@ public class EditController extends BaseController {
 	 * 
 	 * @param key
 	 */
-	@RequestMapping(value = "/createNewBlog", method = RequestMethod.POST)
+	@RequestMapping(value = "/createNewBlog", method = RequestMethod.POST, produces="application/json;charset=utf-8")
 	@ResponseBody
 	public String createNewBlog(HttpServletRequest request, HttpServletResponse response, HttpSession session) {
-
+		response.setContentType("application/json;charset=utf-8");
+		response.setCharacterEncoding("utf-8");
 		return editService.createNewBlog(request, response).toString();
 	}
 
@@ -97,7 +99,8 @@ public class EditController extends BaseController {
 		{
 			return redirect404View();
 		}
-		
+		response.setContentType("application/json;charset=utf-8");
+		response.setCharacterEncoding("utf-8");
 		return editService.editBlog(response, session, blogId);
 	}
 
@@ -113,7 +116,8 @@ public class EditController extends BaseController {
 	@ResponseBody
 	public String createNewBlog(HttpServletRequest request, HttpServletResponse response, HttpSession session,
 			@RequestParam(value = "blogId") Integer blogId) {
-
+		response.setContentType("application/json;charset=utf-8");
+		response.setCharacterEncoding("utf-8");
 		return editService.createNewBlog(request, response).toString();
 	}
 

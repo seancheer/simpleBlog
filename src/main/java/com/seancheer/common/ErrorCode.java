@@ -26,6 +26,8 @@ public enum ErrorCode {
 	
 	PARAMETER_ERROR(106,"参数错误！"),
 	
+	INVALID_BLOG_TITLE(107, "标题过长！"),
+	
 	SERVER_BUSY(108,"服务器忙，请稍后重试！");
 
 	private int code;

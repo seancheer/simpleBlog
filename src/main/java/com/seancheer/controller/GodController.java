@@ -43,7 +43,7 @@ public class GodController {
 	 * 
 	 * @param key
 	 */
-	@RequestMapping(value = "/godEntrance", method = RequestMethod.POST)
+	@RequestMapping(value = "/godEntrance", method = RequestMethod.POST, produces="application/json;charset=utf-8")
 	@ResponseBody
 	public String godEntrance(@Valid NeedGodReq needGodReq, HttpSession session, HttpServletResponse response) {
 		if (StringUtils.isEmpty(needGodReq.getKey())) {

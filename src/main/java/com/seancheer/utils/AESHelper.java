@@ -1,6 +1,5 @@
 package com.seancheer.utils;
 
-import com.mysql.jdbc.util.Base64Decoder;
 import com.seancheer.common.BlogConstants;
 import com.seancheer.exception.BlogBaseException;
 import org.slf4j.Logger;

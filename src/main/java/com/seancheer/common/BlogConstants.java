@@ -1,6 +1,9 @@
 package com.seancheer.common;
 
 public class BlogConstants {
+	
+	//blog title所能接受的最大长度
+	public static final int MAX_BLOGTITLE_LENGTH = 64;
 
 	//浏览器使用window.location.replace进行跳转
 	public static final String REDIRECT = "redirect";
