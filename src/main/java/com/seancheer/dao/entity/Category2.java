@@ -19,7 +19,7 @@ public class Category2 implements BaseCategory {
 	@Id
 	@Column(name = "id", length = 4)
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	private Byte id;
+	private Integer id;
 
 	@Column(name = "name", length = 32)
 	private String name;
@@ -63,11 +63,11 @@ public class Category2 implements BaseCategory {
 	}
 
 	@Override
-	public Byte getId() {
+	public Integer getId() {
 		return id;
 	}
 
-	public void setId(Byte id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 
@@ -92,7 +92,7 @@ public class Category2 implements BaseCategory {
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("[");
-		sb.append("id = " + Byte.toString(id));
+		sb.append("id = " + Integer.toString(id));
 		sb.append(",name = " + name);
 		sb.append(",description = " + description);
 		sb.append(",createTime = " + createTime);

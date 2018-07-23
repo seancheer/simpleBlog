@@ -18,7 +18,7 @@ public class Comment {
 	private Integer id;
 
 	@Column(name = "passage_id", length = 64)
-	private Byte passageId;
+	private Integer passageId;
 
 	@Column(name = "create_time", columnDefinition = "TIMESTAMP default current_timestamp")
 	private Timestamp createTime;
@@ -40,11 +40,11 @@ public class Comment {
 		this.id = id;
 	}
 
-	public Byte getPassageId() {
+	public Integer getPassageId() {
 		return passageId;
 	}
 
-	public void setPassageId(Byte passageId) {
+	public void setPassageId(Integer passageId) {
 		this.passageId = passageId;
 	}
 

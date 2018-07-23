@@ -21,13 +21,13 @@ public class BlogConstants {
 	
 	public static final int TEN_DAY_IN_SECONDS = ONE_DAY_IN_SECONDS * 10;
 	
-	public static final String NEW_BLOG_KEY_TITLE = "blogTitle";
+	public static final String KEY_BLOG_TITLE = "blogTitle";
 	
-	public static final String NEW_BLOG_KEY_CONTENT = "blogContent";
+	public static final String KEY_BLOG_CONTENT = "blogContent";
 	
-	public static final String NEW_BLOG_CATEGORY_0 = "select0";
+	public static final String KEY_BLOG_CATEGORY_0 = "select0";
 	
-	public static final String NEW_BLOG_CATEGORY_1 = "select1";
+	public static final String KEY_BLOG_CATEGORY_1 = "select1";
 	
 	public static final String ADMIN_USER_NAME = "god";
 	

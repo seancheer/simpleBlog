@@ -51,6 +51,15 @@ public interface IEditService {
 	 * @param blogId
 	 * @return
 	 */
-	ModelAndView editBlog(HttpServletResponse response, HttpSession session,Integer blogId); 
+	ModelAndView editBlog(HttpServletResponse response, HttpSession session,Integer blogId);
+
+	/**
+	 * 负责更新blog的接口
+	 * @param request
+	 * @param response
+	 * @param blogId
+	 * @return
+	 */
+	JSONObject updateBlog(HttpServletRequest request, HttpServletResponse response, Integer blogId);
 
 }

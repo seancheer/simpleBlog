@@ -28,7 +28,9 @@ public enum ErrorCode {
 	
 	INVALID_BLOG_TITLE(107, "标题过长！"),
 	
-	SERVER_BUSY(108,"服务器忙，请稍后重试！");
+	SERVER_BUSY(108,"服务器忙，请稍后重试！"),
+
+	UNAUTHORIZED(109,"无相关权限！");
 
 	private int code;
 

@@ -72,7 +72,7 @@
                             <div class="god-toolbar">
                                 <span>阅读(${blog.readCount})</span>
                                 <span>评论(${blog.commentCount})</span>
-                                <a href="#">编辑</a>
+                                <a href="/editBlog?blogId=${blog.id}">编辑</a>
                                 <a href="#">删除</a>
                                 <a href="#">彻底删除</a>
                             </div>

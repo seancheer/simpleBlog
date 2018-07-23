@@ -28,16 +28,16 @@ public class Passage {
 	private Integer userId;
 
 	@Column(name = "category_1_id")
-	private String category1Id;
+	private Integer category1Id;
 
 	@Column(name = "category_2_id")
-	private String category2Id;
+	private Integer category2Id;
 
 	@Column(name = "category_3_id")
-	private String category3Id;
+	private Integer category3Id;
 
 	@Column(name = "category_4_id")
-	private String category4Id;
+	private Integer category4Id;
 
 	@Column(name = "comment_count", columnDefinition = "INT default 0")
 	private Integer commentCount = 0;
@@ -81,35 +81,35 @@ public class Passage {
 		this.userId = userId;
 	}
 
-	public String getCategory1Id() {
+	public Integer getCategory1Id() {
 		return category1Id;
 	}
 
-	public void setCategory1Id(String category1Id) {
+	public void setCategory1Id(Integer category1Id) {
 		this.category1Id = category1Id;
 	}
 
-	public String getCategory2Id() {
+	public Integer getCategory2Id() {
 		return category2Id;
 	}
 
-	public void setCategory2Id(String category2Id) {
+	public void setCategory2Id(Integer category2Id) {
 		this.category2Id = category2Id;
 	}
 
-	public String getCategory3Id() {
+	public Integer getCategory3Id() {
 		return category3Id;
 	}
 
-	public void setCategory3Id(String category3Id) {
+	public void setCategory3Id(Integer category3Id) {
 		this.category3Id = category3Id;
 	}
 
-	public String getCategory4Id() {
+	public Integer getCategory4Id() {
 		return category4Id;
 	}
 
-	public void setCategory4Id(String category4Id) {
+	public void setCategory4Id(Integer category4Id) {
 		this.category4Id = category4Id;
 	}
 

@@ -26,7 +26,7 @@ public interface BaseCategory {
 
 	String getDescription();
 
-	Byte getId();
+	Integer getId();
 
 	String getName();
 
