@@ -28,16 +28,16 @@ public class Passage {
 	private Integer userId;
 
 	@Column(name = "category_1_id")
-	private Integer category1Id;
+	private Byte category1Id;
 
 	@Column(name = "category_2_id")
-	private Integer category2Id;
+	private Byte category2Id;
 
 	@Column(name = "category_3_id")
-	private Integer category3Id;
+	private Byte category3Id;
 
 	@Column(name = "category_4_id")
-	private Integer category4Id;
+	private Byte category4Id;
 
 	@Column(name = "comment_count", columnDefinition = "INT default 0")
 	private Integer commentCount = 0;
@@ -52,7 +52,7 @@ public class Passage {
 	private Timestamp lastModifyTime;
 
 	@Column(name = "is_del", columnDefinition = "BIT default 0")
-	private Integer isDel = 0;
+	private Byte isDel = 0;
 
 	@Column(name = "content")
 	private String content;
@@ -81,35 +81,35 @@ public class Passage {
 		this.userId = userId;
 	}
 
-	public Integer getCategory1Id() {
+	public Byte getCategory1Id() {
 		return category1Id;
 	}
 
-	public void setCategory1Id(Integer category1Id) {
+	public void setCategory1Id(Byte category1Id) {
 		this.category1Id = category1Id;
 	}
 
-	public Integer getCategory2Id() {
+	public Byte getCategory2Id() {
 		return category2Id;
 	}
 
-	public void setCategory2Id(Integer category2Id) {
+	public void setCategory2Id(Byte category2Id) {
 		this.category2Id = category2Id;
 	}
 
-	public Integer getCategory3Id() {
+	public Byte getCategory3Id() {
 		return category3Id;
 	}
 
-	public void setCategory3Id(Integer category3Id) {
+	public void setCategory3Id(Byte category3Id) {
 		this.category3Id = category3Id;
 	}
 
-	public Integer getCategory4Id() {
+	public Byte getCategory4Id() {
 		return category4Id;
 	}
 
-	public void setCategory4Id(Integer category4Id) {
+	public void setCategory4Id(Byte category4Id) {
 		this.category4Id = category4Id;
 	}
 
@@ -137,11 +137,11 @@ public class Passage {
 		this.lastModifyTime = lastModifyTime;
 	}
 
-	public Integer getIsDel() {
+	public Byte getIsDel() {
 		return isDel;
 	}
 
-	public void setIsDel(Integer isDel) {
+	public void setIsDel(Byte isDel) {
 		this.isDel = isDel;
 	}
 

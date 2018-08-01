@@ -20,7 +20,7 @@ public class Category1 implements BaseCategory{
 	@Id
 	@Column(name = "id", length = 4)
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	private Integer id;
+	private Byte id;
 
 	@Column(name = "name", length = 32)
 	private String name;
@@ -31,8 +31,8 @@ public class Category1 implements BaseCategory{
 	@Column(name = "create_time", columnDefinition = "TIMESTAMP default current_timestamp")
 	private Timestamp createTime;
 
-	@Column(name = "is_del", columnDefinition = "INT default 0")
-	private Integer isDel = 0;
+	@Column(name = "is_del", columnDefinition = "BIT default 0")
+	private Byte isDel = 0;
 
 	@OneToMany(targetEntity = Category2.class, cascade = { CascadeType.PERSIST,
 			CascadeType.MERGE }, fetch = FetchType.EAGER)
@@ -63,20 +63,20 @@ public class Category1 implements BaseCategory{
 		this.createTime = createTime;
 	}
 
-	public Integer getIsDel() {
+	public Byte getIsDel() {
 		return isDel;
 	}
 
-	public void setIsDel(Integer isDel) {
+	public void setIsDel(Byte isDel) {
 		this.isDel = isDel;
 	}
 
 	@Override
-	public Integer getId() {
+	public Byte getId() {
 		return id;
 	}
 
-	public void setId(Integer id) {
+	public void setId(Byte id) {
 		this.id = id;
 	}
 

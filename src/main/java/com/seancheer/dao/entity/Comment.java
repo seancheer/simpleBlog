@@ -26,8 +26,8 @@ public class Comment {
 	@Column(name = "user_id", length = 64)
 	private Integer userId;
 
-	@Column(name = "is_del", length = 32, columnDefinition = "INT default 0")
-	private Integer isDel = 0;
+	@Column(name = "is_del", length = 32, columnDefinition = "BIT default 0")
+	private Byte isDel = 0;
 
 	@Column(name = "content")
 	private String content;
@@ -64,11 +64,11 @@ public class Comment {
 		this.userId = userId;
 	}
 
-	public Integer getIsDel() {
+	public Byte getIsDel() {
 		return isDel;
 	}
 
-	public void setIsDel(Integer isDel) {
+	public void setIsDel(Byte isDel) {
 		this.isDel = isDel;
 	}
 

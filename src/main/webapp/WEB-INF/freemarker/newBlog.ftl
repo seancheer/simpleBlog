@@ -38,9 +38,9 @@
                     </div>
 
                     <script type="text/javascript">
-                        var newBlogEditor;
+                        var blogEditor;
                         $(function () {
-                            newBlogEditor = editormd("blogEditorDiv", {
+                            blogEditor = editormd("blogEditorDiv", {
                                 width: "90%",
                                 height: 640,
                                 syncScrolling: "single",

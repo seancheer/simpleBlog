@@ -68,7 +68,7 @@ public class BlogDaoImpl extends BaseDaoImpl<Passage> implements BlogDao {
 	 */
 	@Override
 	public void deleteRecordFake(Passage rec) throws BlogBaseException {
-		rec.setIsDel(1);
+		rec.setIsDel((byte)1);
 		updateRecord(rec);
 	}
 
@@ -111,7 +111,7 @@ public class BlogDaoImpl extends BaseDaoImpl<Passage> implements BlogDao {
 		query.setParameter("name", title);
 
 		if (!includeDel) {
-			query.setParameter("isDel", 0);
+			query.setParameter("isDel", (byte)0);
 		}
 
 		try {
@@ -162,7 +162,7 @@ public class BlogDaoImpl extends BaseDaoImpl<Passage> implements BlogDao {
 		query.setParameter("id", id);
 
 		if (!includeDel) {
-			query.setParameter("isDel", 0);
+			query.setParameter("isDel", (byte)0);
 		}
 
 		List result = null;
@@ -210,7 +210,7 @@ public class BlogDaoImpl extends BaseDaoImpl<Passage> implements BlogDao {
 		// 准备查询当前限制条件下的个数
 		Criteria criteria = getCurrentSession().createCriteria(Passage.class);
 		criteria.setProjection(Projections.rowCount());
-		criteria.add(Restrictions.eq("isDel", 0));
+		criteria.add(Restrictions.eq("isDel", (byte)0));
 
 		// 修改为传入categoryId=1,2，第一位表示category的编号，第二位表示具体的id
 		if (null != categoryIds && categoryIds.size() == 2) {
@@ -224,7 +224,7 @@ public class BlogDaoImpl extends BaseDaoImpl<Passage> implements BlogDao {
 				.setMaxResults(BlogConfigImpl.DEFAULT_SUM_PER_PAGE);
 		if (null != categoryKey) {
 			query.setParameter(categoryKey, categoryIds.get(1));
-			criteria.add(Restrictions.eq(categoryKey, categoryIds.get(1)));
+			criteria.add(Restrictions.eq(categoryKey, Byte.parseByte(categoryIds.get(1))));
 		}
 
 		try {

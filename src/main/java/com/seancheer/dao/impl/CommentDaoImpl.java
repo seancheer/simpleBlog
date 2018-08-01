@@ -98,7 +98,7 @@ public class CommentDaoImpl extends BaseDaoImpl<Comment> implements CommentDao {
 		query.setParameter("passageId", id);
 
 		if (!includeDel) {
-			query.setParameter("isDel", 0);
+			query.setParameter("isDel", (byte)0);
 		}
 
 		try {
@@ -147,7 +147,7 @@ public class CommentDaoImpl extends BaseDaoImpl<Comment> implements CommentDao {
 		query.setParameter("userId", userId);
 
 		if (!includeDel) {
-			query.setParameter("isDel", 0);
+			query.setParameter("isDel", (byte)0);
 		}
 
 		try {

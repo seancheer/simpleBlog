@@ -26,7 +26,7 @@
 
 
         <section id="passage-content" class="" role="main">
-            <form id="editBlogForm" name="editBlogForm" role="form" action="/editBlog" method="POST">
+            <form id="editBlogForm" name="editBlogForm" role="form" action="/updateBlog" method="POST">
                 <div class='blod-editor-container'>
                     <!--title-->
                     <div class='title-div'>
@@ -40,9 +40,9 @@
                     </div>
 
                     <script type="text/javascript">
-                        var newBlogEditor;
+                        var blogEditor;
                         $(function () {
-                            newBlogEditor = editormd("blogEditorDiv", {
+                            blogEditor = editormd("blogEditorDiv", {
                                 width: "90%",
                                 height: 640,
                                 syncScrolling: "single",
@@ -57,8 +57,8 @@
                     <!-- category -->
                     <div id="categoryDiv" class='category-div'>
                         <span class='category-span'>类别：</span>
-                        <!-- 在服务端加载category -->
-                        <span id="categoryPlaceHolder" style="display:none"></span>
+                        <!-- 加载category -->
+                        <span id="categoryPlaceHolder" style="display:none">${curBlogCategoryIds}</span>
                     </div>
 
                     <!-- submit btn-->

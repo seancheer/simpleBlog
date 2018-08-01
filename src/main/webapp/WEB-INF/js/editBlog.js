@@ -15,8 +15,13 @@ $(document).ready(function (event) {
             return;
         }
 
+        var categoryPlaceHolder = $("#categoryPlaceHolder");
+        var selected = categoryPlaceHolder.html().split(",");
+
         removeAllSelect(parentDiv);
-        resetCategorySelect(parentDiv);
+        resetCategorySelect(parentDiv, window.allCategories, 0, selected);
+        //设置当前blog的category
+        //setBlogCategory();
     }
 
     /**
@@ -26,8 +31,10 @@ $(document).ready(function (event) {
                                 <option>1</option>
                             </select>
                         </div>
+        
+                        //selectedArray: 在渲染select的时候，应该自动selected的value
      **/
-    function resetCategorySelect(parentDiv, category = window.allCategories, selectIndex = 0) {
+    function resetCategorySelect(parentDiv, category = window.allCategories, selectIndex = 0, selectedArray = []) {
         if (undefined === category || category.length == 0) {
             return;
         }
@@ -39,12 +46,38 @@ $(document).ready(function (event) {
         var childSelect = $(parentDiv.find('select')[selectIndex]);
         var defaultCategory = undefined;
 
+        var shouldSelected = selectedArray[selectIndex];
+        if (shouldSelected != undefined)
+        {
+            shouldSelected = parseInt(shouldSelected);
+        }
+
         category.forEach(function (curValue, index) {
             if (defaultCategory === undefined) {
-                defaultCategory = curValue.children;
+                //默认取当前第一个
+                if (shouldSelected === undefined)
+                {
+                    defaultCategory = curValue.children;
+                }
+                else if(shouldSelected === curValue.id)
+                {
+                    defaultCategory = curValue.children;    
+                }
+                else
+                {
+                    ;
+                }
             }
-
-            selected = (0 == index ? "selected" : "");
+            
+            //如果当前需要选中的为undefined的话，那么默认选取第一个，否则的话，选取正确的value
+            if (shouldSelected === undefined)
+            {
+                selected = (0 == index ? "selected" : "");
+            }
+            else
+            {
+                selected = (shouldSelected === curValue.id ? "selected" : "");
+            }
             options += genOption(curValue, selected);
         });
 
@@ -75,7 +108,8 @@ $(document).ready(function (event) {
                     coordinate.push(tmpId.substring(tmpId.length - 1));
 
                 });
-
+                
+                //根据select的坐标来查找其名下的children
                 var children = findCurChildren(coordinate);
                 if (undefined === children || 0 == children.length) {
                     return;
@@ -92,7 +126,7 @@ $(document).ready(function (event) {
             childSelect.children('option').remove();
             childSelect.append(options);
         }
-        resetCategorySelect(parentDiv, defaultCategory, ++selectIndex);
+        resetCategorySelect(parentDiv, defaultCategory, ++selectIndex, selectedArray);
     }
 
     /**
@@ -169,6 +203,21 @@ $(document).ready(function (event) {
 
     }
 
+
+    /**
+     * 设置当前blog的category
+     */
+    function setBlogCategory()
+    {
+        var categoryPlaceHolder = $("#categoryPlaceHolder");
+        var categories = categoryPlaceHolder.html().split(",");
+        console.log("categories:" + categories);
+
+        categories.forEach(function(item, index){
+            var s = $("#select" + index);
+            s.val(item);
+        });
+    }
    
 
 
@@ -178,14 +227,14 @@ $(document).ready(function (event) {
     })();
 
     //创建新博客的请求
-    $('#newBlogBtn').click(
+    $('#editBlogBtn').click(
         function (event) {
             event.preventDefault();
 
-            if (checkBeforeNewBlog()) {
-                var form = $("#newBlogForm");
+            if (checkBlog()) {
+                var form = $("#editBlogForm");
                 //此处需要拼装传送给服务器的内容
-                var dataJson = constructFormData(newBlogEditor);
+                var dataJson = constructFormData(blogEditor);
 
                 submitFormAsync(form, errorHandler,
                     succHandler, dataJson);
@@ -195,7 +244,7 @@ $(document).ready(function (event) {
     /**
      * 发表博客前检查各个参数是否合法
      */
-    function checkBeforeNewBlog() {
+    function checkBlog() {
         var blogTitle = $('#blogTitle').val().trim();
         var blogContent = $('#blogContent').html().trim();
         if (blogTitle.length == 0) {
@@ -213,7 +262,7 @@ $(document).ready(function (event) {
         children.each(function () {
             var selected = $(this).find('select')[0].selectedIndex;
             if (parseInt(selected) < 0) {
-                value = false;
+                valid = false;
             }
         });
 
@@ -230,7 +279,7 @@ $(document).ready(function (event) {
     {
         var result = {};
         result['blogTitle'] = $('#blogTitle').val().trim();
-        var blogContent = newBlogEditor.getHTML();
+        var blogContent = blogEditor.getHTML();
         result['blogContent'] = blogContent;
 
         var children =  $("#categoryDiv").find("[id^='" + wrapperDivIdPrefix + "']");

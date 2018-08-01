@@ -29,8 +29,8 @@ public class User {
 	@Column(name = "user_type")
 	private Short userType;
 
-	@Column(name = "is_del", columnDefinition = "INT default 0")
-	private Integer isDel = 0;
+	@Column(name = "is_del", columnDefinition = "BIT default 0")
+	private Byte isDel = 0;
 
 	public String getPwd() {
 		return pwd;
@@ -56,11 +56,11 @@ public class User {
 		this.userType = userType;
 	}
 
-	public Integer getIsDel() {
+	public Byte getIsDel() {
 		return isDel;
 	}
 
-	public void setIsDel(Integer isDel) {
+	public void setIsDel(Byte isDel) {
 		this.isDel = isDel;
 	}
 

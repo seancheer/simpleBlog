@@ -119,12 +119,12 @@ public class EditController extends BaseController {
     @RequestMapping(value = "/updateBlog", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
     @ResponseBody
     public String createNewBlog(HttpServletRequest request, HttpServletResponse response, HttpSession session,
-                                @RequestParam(value = "blogId") Integer blogId) {
+                                @RequestParam(value = "blogId", required = false) Integer blogId) {
         response.setContentType("application/json;charset=utf-8");
         response.setCharacterEncoding("utf-8");
         //return editService.up(request, response).toString();
         if (null == blogId || blogId < 0) {
-            return ErrorCode.INTERNAL_ERROR.toString();
+            return ErrorCode.NOT_FOUND.toString();
         }
 
         return editService.updateBlog(request, response, blogId).toString();

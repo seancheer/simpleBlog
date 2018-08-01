@@ -77,7 +77,7 @@ public class Category1DaoImpl extends BaseDaoImpl<Category1> implements Category
 		Query query = getCurrentSession().createQuery("from Category1" + (includeDel ? "" : " where isDel = :isDel"));
 
 		if (!includeDel) {
-			query.setParameter("isDel", 0);
+			query.setParameter("isDel", (byte)0);
 		}
 
 		try {
@@ -127,7 +127,7 @@ public class Category1DaoImpl extends BaseDaoImpl<Category1> implements Category
 		query.setParameter("name", name);
 
 		if (!includeDel) {
-			query.setParameter("isDel", 0);
+			query.setParameter("isDel", (byte)0);
 		}
 
 		try {
@@ -177,7 +177,7 @@ public class Category1DaoImpl extends BaseDaoImpl<Category1> implements Category
 		query.setParameter("id", (byte)id);
 
 		if (!includeDel) {
-			query.setParameter("isDel", 0);
+			query.setParameter("isDel", (byte)0);
 		}
 
 		try {

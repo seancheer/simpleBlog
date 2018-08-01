@@ -30,7 +30,9 @@ public enum ErrorCode {
 	
 	SERVER_BUSY(108,"服务器忙，请稍后重试！"),
 
-	UNAUTHORIZED(109,"无相关权限！");
+	UNAUTHORIZED(109,"无相关权限！"),
+	
+	NOT_FOUND(110, "无法找到对应资源！");
 
 	private int code;
 

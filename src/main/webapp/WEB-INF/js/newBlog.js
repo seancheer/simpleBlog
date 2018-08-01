@@ -185,7 +185,7 @@ $(document).ready(function (event) {
             if (checkBeforeNewBlog()) {
                 var form = $("#newBlogForm");
                 //此处需要拼装传送给服务器的内容
-                var dataJson = constructFormData(newBlogEditor);
+                var dataJson = constructFormData(blogEditor);
 
                 submitFormAsync(form, errorHandler,
                     succHandler, dataJson);
@@ -213,7 +213,7 @@ $(document).ready(function (event) {
         children.each(function () {
             var selected = $(this).find('select')[0].selectedIndex;
             if (parseInt(selected) < 0) {
-                value = false;
+                valid = false;
             }
         });
 
@@ -230,7 +230,7 @@ $(document).ready(function (event) {
     {
         var result = {};
         result['blogTitle'] = $('#blogTitle').val().trim();
-        var blogContent = newBlogEditor.getHTML();
+        var blogContent = blogEditor.getHTML();
         result['blogContent'] = blogContent;
 
         var children =  $("#categoryDiv").find("[id^='" + wrapperDivIdPrefix + "']");

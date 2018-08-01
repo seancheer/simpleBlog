@@ -119,7 +119,7 @@ public class UserDaoImpl extends BaseDaoImpl<User> implements UserDao {
 		query.setParameter("name", name);
 
 		if (!includeDel) {
-			query.setParameter("isDel", 0);
+			query.setParameter("isDel", (byte)0);
 		}
 
 		List result = null;

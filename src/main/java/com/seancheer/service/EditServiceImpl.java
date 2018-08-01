@@ -72,8 +72,8 @@ public class EditServiceImpl extends BaseController implements IEditService {
 			HttpServletResponse response) {
 		String blogTitle = blogData.getString(BlogConstants.KEY_BLOG_TITLE);
 		String blogContent = blogData.getString(BlogConstants.KEY_BLOG_CONTENT);
-		int category1 = Integer.parseInt(blogData.getString(BlogConstants.KEY_BLOG_CATEGORY_0));
-		int category2 = Integer.parseInt(blogData.getString(BlogConstants.KEY_BLOG_CATEGORY_1));
+		Byte category1 = Byte.parseByte(blogData.getString(BlogConstants.KEY_BLOG_CATEGORY_0));
+		Byte category2 = Byte.parseByte(blogData.getString(BlogConstants.KEY_BLOG_CATEGORY_1));
 		Passage passage = new Passage();
 		passage.setTitle(blogTitle);
 		passage.setContent(blogContent);
@@ -197,6 +197,10 @@ public class EditServiceImpl extends BaseController implements IEditService {
 
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.addObject("curBlog", passage);
+		StringBuilder curBlogCategoryIds = new StringBuilder();
+		curBlogCategoryIds.append(passage.getCategory1Id()).append(",").append(passage.getCategory2Id());
+		//放入当前blog的category ids
+		modelAndView.addObject("curBlogCategoryIds", curBlogCategoryIds.toString());
 		return modelAndView;
 	}
 
@@ -251,8 +255,8 @@ public class EditServiceImpl extends BaseController implements IEditService {
 
         String blogTitle = blogData.getString(BlogConstants.KEY_BLOG_TITLE);
         String blogContent = blogData.getString(BlogConstants.KEY_BLOG_CONTENT);
-        int category1 = Integer.parseInt(blogData.getString(BlogConstants.KEY_BLOG_CATEGORY_0));
-        int category2 = Integer.parseInt(blogData.getString(BlogConstants.KEY_BLOG_CATEGORY_1));
+        Byte category1 = Byte.parseByte(blogData.getString(BlogConstants.KEY_BLOG_CATEGORY_0));
+        Byte category2 = Byte.parseByte(blogData.getString(BlogConstants.KEY_BLOG_CATEGORY_1));
 
         passage.setTitle(blogTitle);
         passage.setContent(blogContent);
