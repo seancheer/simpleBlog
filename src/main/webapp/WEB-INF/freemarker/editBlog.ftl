@@ -26,7 +26,7 @@
 
 
         <section id="passage-content" class="" role="main">
-            <form id="editBlogForm" name="editBlogForm" role="form" action="/updateBlog" method="POST">
+            <form id="editBlogForm" name="editBlogForm" role="form" action="/updateBlog?blogId=${curBlog.id}" method="POST">
                 <div class='blod-editor-container'>
                     <!--title-->
                     <div class='title-div'>

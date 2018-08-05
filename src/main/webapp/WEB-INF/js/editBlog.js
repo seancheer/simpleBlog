@@ -226,7 +226,7 @@ $(document).ready(function (event) {
         loadCategories();
     })();
 
-    //创建新博客的请求
+    //提交博客更改的请求
     $('#editBlogBtn').click(
         function (event) {
             event.preventDefault();
@@ -242,7 +242,7 @@ $(document).ready(function (event) {
         });
 
     /**
-     * 发表博客前检查各个参数是否合法
+     * 检查各个参数是否合法
      */
     function checkBlog() {
         var blogTitle = $('#blogTitle').val().trim();

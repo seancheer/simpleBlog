@@ -2,6 +2,7 @@ package com.seancheer.service;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -45,19 +46,16 @@ public class EditServiceImpl extends BaseController implements IEditService {
 	private Category2Dao category2Dao;
 
 	@Override
-	public JSONObject createNewBlog(HttpServletRequest request, HttpServletResponse response) {
-
-		JSONObject blogData = convertFromRequest(request);
-		if (null == blogData)
-        {
-            return ErrorCode.PARAMETER_ERROR.toJson();
-        }
-
-		if (!checkBlogData(blogData)) {
+	public JSONObject createNewBlog(HttpServletRequest request, HttpServletResponse response, Map<String,String> postForm) {
+		if (null == postForm) {
 			return ErrorCode.PARAMETER_ERROR.toJson();
 		}
 
-		return createNewBlogInternal(blogData, request, response);
+		if (!checkBlogData(postForm)) {
+			return ErrorCode.PARAMETER_ERROR.toJson();
+		}
+
+		return createNewBlogInternal(postForm, request, response);
 	}
 
 	/**
@@ -68,12 +66,12 @@ public class EditServiceImpl extends BaseController implements IEditService {
 	 * @param response
 	 * @return
 	 */
-	private JSONObject createNewBlogInternal(JSONObject blogData, HttpServletRequest request,
+	private JSONObject createNewBlogInternal(Map<String,String> blogData, HttpServletRequest request,
 			HttpServletResponse response) {
-		String blogTitle = blogData.getString(BlogConstants.KEY_BLOG_TITLE);
-		String blogContent = blogData.getString(BlogConstants.KEY_BLOG_CONTENT);
-		Byte category1 = Byte.parseByte(blogData.getString(BlogConstants.KEY_BLOG_CATEGORY_0));
-		Byte category2 = Byte.parseByte(blogData.getString(BlogConstants.KEY_BLOG_CATEGORY_1));
+		String blogTitle = blogData.get(BlogConstants.KEY_BLOG_TITLE);
+		String blogContent = blogData.get(BlogConstants.KEY_BLOG_CONTENT);
+		Byte category1 = Byte.parseByte(blogData.get(BlogConstants.KEY_BLOG_CATEGORY_0));
+		Byte category2 = Byte.parseByte(blogData.get(BlogConstants.KEY_BLOG_CATEGORY_1));
 		Passage passage = new Passage();
 		passage.setTitle(blogTitle);
 		passage.setContent(blogContent);
@@ -114,14 +112,14 @@ public class EditServiceImpl extends BaseController implements IEditService {
 	 * @param blogData
 	 * @return
 	 */
-	private boolean checkBlogData(JSONObject blogData) {
+	private boolean checkBlogData(Map<String,String> blogData) {
 		String blogTitle, blogContent, select1, select2;
 
 		try {
-			blogTitle = blogData.getString(BlogConstants.KEY_BLOG_TITLE);
-			blogContent = blogData.getString(BlogConstants.KEY_BLOG_CONTENT);
-			select1 = blogData.getString(BlogConstants.KEY_BLOG_CATEGORY_0);
-            select2 = blogData.getString(BlogConstants.KEY_BLOG_CATEGORY_1);
+			blogTitle = blogData.get(BlogConstants.KEY_BLOG_TITLE);
+			blogContent = blogData.get(BlogConstants.KEY_BLOG_CONTENT);
+			select1 = blogData.get(BlogConstants.KEY_BLOG_CATEGORY_0);
+			select2 = blogData.get(BlogConstants.KEY_BLOG_CATEGORY_1);
 		} catch (JSONException e) {
 			// 当某个key不在jsonObject中的时候，会抛出JSONException，而不是返回null
 			logger.error(e.getMessage());
@@ -134,12 +132,12 @@ public class EditServiceImpl extends BaseController implements IEditService {
 			return false;
 		}
 
-        if (blogTitle.length() >= BlogConstants.MAX_BLOGTITLE_LENGTH) {
-            logger.debug("Blog title is too long!");
-            return false;
-        }
+		if (blogTitle.length() >= BlogConstants.MAX_BLOGTITLE_LENGTH) {
+			logger.debug("Blog title is too long!");
+			return false;
+		}
 
-        if (blogContent.length() <= MIN_BLOG_CONTENT_LENGTH) {
+		if (blogContent.length() <= MIN_BLOG_CONTENT_LENGTH) {
 			logger.error("blogContent is too short! at least:{}", MIN_BLOG_CONTENT_LENGTH);
 			return false;
 		}
@@ -154,23 +152,22 @@ public class EditServiceImpl extends BaseController implements IEditService {
 			return false;
 		}
 
-        try {
-            List<Category2> category2List = category2Dao.queryRecById(category2);
-            if (category2List.isEmpty()) {
-                logger.info("Can not find category2 with id:{}", category2);
-                return false;
-            }
+		try {
+			List<Category2> category2List = category2Dao.queryRecById(category2);
+			if (category2List.isEmpty()) {
+				logger.info("Can not find category2 with id:{}", category2);
+				return false;
+			}
 
-            String parentId = String.valueOf(category2List.get(0).getParentId().getId());
-            if (Integer.parseInt(parentId) != category1)
-            {
-                logger.debug("CategoryId is invalid! Not match to parentId:" + parentId);
-                return false;
-            }
-        } catch (BlogBaseException e) {
-            logger.info("Invalid category2 id! category2Id:{}", category2);
-            return false;
-        }
+			String parentId = String.valueOf(category2List.get(0).getParentId().getId());
+			if (Integer.parseInt(parentId) != category1) {
+				logger.debug("CategoryId is invalid! Not match to parentId:" + parentId);
+				return false;
+			}
+		} catch (BlogBaseException e) {
+			logger.info("Invalid category2 id! category2Id:{}", category2);
+			return false;
+		}
 
 		return true;
 	}
@@ -188,9 +185,8 @@ public class EditServiceImpl extends BaseController implements IEditService {
 			logger.error("Query passage failed! blogId:" + blogId);
 			return redirect500View();
 		}
-		
-		if (null == passage)
-		{
+
+		if (null == passage) {
 			logger.debug("Can not find the blog! blogId:" + blogId);
 			return redirect404View();
 		}
@@ -199,99 +195,79 @@ public class EditServiceImpl extends BaseController implements IEditService {
 		modelAndView.addObject("curBlog", passage);
 		StringBuilder curBlogCategoryIds = new StringBuilder();
 		curBlogCategoryIds.append(passage.getCategory1Id()).append(",").append(passage.getCategory2Id());
-		//放入当前blog的category ids
+		// 放入当前blog的category ids
 		modelAndView.addObject("curBlogCategoryIds", curBlogCategoryIds.toString());
 		return modelAndView;
 	}
 
-    /**
-     * 负责更新blog的接口
-     * @param request
-     * @param response
-     * @param blogId
-     * @return
-     */
-    @Override
-	public JSONObject updateBlog(HttpServletRequest request, HttpServletResponse response, Integer blogId)
-    {
-        JSONObject blogData = convertFromRequest(request);
-        if (null == blogData)
-        {
-            return ErrorCode.PARAMETER_ERROR.toJson();
-        }
+	/**
+	 * 负责更新blog的接口
+	 * 
+	 * @param request
+	 * @param response
+	 * @param blogId
+	 * @return
+	 */
+	@Override
+	public JSONObject updateBlog(HttpServletRequest request, HttpServletResponse response, Integer blogId, Map<String,String> postForm) {
+		if (null == postForm) {
+			return ErrorCode.PARAMETER_ERROR.toJson();
+		}
 
-        if (!checkBlogData(blogData)) {
-            return ErrorCode.PARAMETER_ERROR.toJson();
-        }
+		if (!checkBlogData(postForm)) {
+			return ErrorCode.PARAMETER_ERROR.toJson();
+		}
 
-        return updateBlogInternal(blogData, request, blogId);
-    }
+		return updateBlogInternal(postForm, request, blogId);
+	}
 
-    /**
-     * 真正用来更新blog的方法
-     * 1 通过blogid查询数据库中的信息
-     * 2 检查相关的user信息，cookie中的用户是否有权限进行编辑等。。
-     * 3
-     * @param blogData
-     * @param request
-     * @param blogId
-     * @return
-     */
-    private JSONObject updateBlogInternal(JSONObject blogData, HttpServletRequest request, Integer blogId)
-    {
-        Passage passage = null;
-        try {
-            passage = passageDao.queryRecordById(blogId);
-            Cookie cookie = CookieHelper.getCookieByKey(request.getCookies(),"userId");
-            if (null == cookie || !String.valueOf(passage.getUserId()).equals(cookie.getValue()))
-            {
-                logger.info("Can not find cookie info or you do not have authorization to this passage!");
-                return ErrorCode.UNAUTHORIZED.toJson();
-            }
-        } catch (BlogBaseException e) {
-            logger.info("Querying passage failed! blogId:" + blogId);
-            return ErrorCode.PARAMETER_ERROR.toJson();
-        }
+	/**
+	 * 真正用来更新blog的方法 1 通过blogid查询数据库中的信息 2 检查相关的user信息，cookie中的用户是否有权限进行编辑等。。 3
+	 * 
+	 * @param blogData
+	 * @param request
+	 * @param blogId
+	 * @return
+	 */
+	private JSONObject updateBlogInternal(Map<String,String> blogData, HttpServletRequest request, Integer blogId) {
+		Passage passage = null;
+		try {
+			passage = passageDao.queryRecordById(blogId);
+			if (null == passage) {
+				logger.debug("Can not find this passage! passagedId:" + blogId);
+				return ErrorCode.NOT_FOUND.toJson();
+			}
+			Cookie cookie = CookieHelper.getCookieByKey(request.getCookies(), "userId");
+			// 以后需要增加对用户acl的控制
+			if (null == cookie || !String.valueOf(passage.getUserId()).equals(cookie.getValue())) {
+				logger.info("Can not find cookie info or you do not have authorization to this passage!");
+				return ErrorCode.UNAUTHORIZED.toJson();
+			}
+		} catch (BlogBaseException e) {
+			logger.info("Querying passage failed! blogId:" + blogId);
+			return ErrorCode.PARAMETER_ERROR.toJson();
+		}
 
-        String blogTitle = blogData.getString(BlogConstants.KEY_BLOG_TITLE);
-        String blogContent = blogData.getString(BlogConstants.KEY_BLOG_CONTENT);
-        Byte category1 = Byte.parseByte(blogData.getString(BlogConstants.KEY_BLOG_CATEGORY_0));
-        Byte category2 = Byte.parseByte(blogData.getString(BlogConstants.KEY_BLOG_CATEGORY_1));
+		String blogTitle = blogData.get(BlogConstants.KEY_BLOG_TITLE);
+		String blogContent = blogData.get(BlogConstants.KEY_BLOG_CONTENT);
+		Byte category1 = Byte.parseByte(blogData.get(BlogConstants.KEY_BLOG_CATEGORY_0));
+		Byte category2 = Byte.parseByte(blogData.get(BlogConstants.KEY_BLOG_CATEGORY_1));
 
-        passage.setTitle(blogTitle);
-        passage.setContent(blogContent);
-        passage.setCategory1Id(category1);
-        passage.setCategory2Id(category2);
+		passage.setTitle(blogTitle);
+		passage.setContent(blogContent);
+		passage.setCategory1Id(category1);
+		passage.setCategory2Id(category2);
 
-        try {
-            passageDao.updateRecord(passage);
-        } catch (BlogBaseException e) {
-            logger.error("Updating blog failed!", e);
-            return ErrorCode.SERVER_BUSY.toJson();
-        }
+		try {
+			passageDao.updateRecord(passage);
+		} catch (BlogBaseException e) {
+			logger.error("Updating blog failed!", e);
+			return ErrorCode.SERVER_BUSY.toJson();
+		}
 
-        JSONObject result = ErrorCode.POST_SUCCESS.toJson();
-        result.put(BlogConstants.HREF, "/blog?blogId=" + passage.getId());
-        return result;
-    }
-
-
-    /**
-     * 从request中读取用户传入的blog信息
-     * @param request
-     * @return
-     */
-    private JSONObject convertFromRequest(HttpServletRequest request)
-    {
-        try {
-            String blogStringData = IOUtils.convertStreamToString(request.getInputStream(),
-                    request.getCharacterEncoding());
-            return new JSONObject(blogStringData);
-        } catch (IOException | InterruptedException e) {
-            logger.error("Reading from inputstream failure!", e);
-        } catch (JSONException e) {
-            logger.error("Parsing Json error! Invalid blog Data! ", e);
-        }
-        return null;
-    }
+		JSONObject result = ErrorCode.POST_SUCCESS.toJson();
+		// 跳转到博客详情页
+		result.put(BlogConstants.HREF, "/blog?blogId=" + passage.getId());
+		return result;
+	}
 }

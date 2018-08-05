@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -43,9 +44,9 @@ public class GodController {
 	 * 
 	 * @param key
 	 */
-	@RequestMapping(value = "/godEntrance", method = RequestMethod.POST, produces="application/json;charset=utf-8")
+	@RequestMapping(value = "/godEntrance", method = RequestMethod.POST, produces="application/json; charset=UTF-8")
 	@ResponseBody
-	public String godEntrance(@Valid NeedGodReq needGodReq, HttpSession session, HttpServletResponse response) {
+	public String godEntrance(@RequestBody @Valid NeedGodReq needGodReq, HttpSession session, HttpServletResponse response) {
 		if (StringUtils.isEmpty(needGodReq.getKey())) {
 			logger.info("Invalid key. Verifing failed! key:" + needGodReq.getKey());
 			response.setStatus(HttpStatus.FORBIDDEN.value());

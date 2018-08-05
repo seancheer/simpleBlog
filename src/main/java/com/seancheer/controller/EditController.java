@@ -1,6 +1,7 @@
 package com.seancheer.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -12,10 +13,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.seancheer.dao.entity.BaseCategory;
@@ -79,14 +78,16 @@ public class EditController extends BaseController {
      * @param request  request
      * @param response response
      * @param session  session
+     * @param postForm post的表单信息
      * @return 创建后的json
      */
     @RequestMapping(value = "/createNewBlog", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
     @ResponseBody
-    public String createNewBlog(HttpServletRequest request, HttpServletResponse response, HttpSession session) {
+    public String createNewBlog(HttpServletRequest request, HttpServletResponse response, HttpSession session,
+                                @RequestBody final Map<String,String> postForm) {
         response.setContentType("application/json;charset=utf-8");
         response.setCharacterEncoding("utf-8");
-        return editService.createNewBlog(request, response).toString();
+        return editService.createNewBlog(request, response, postForm).toString();
     }
 
     /**
@@ -114,20 +115,30 @@ public class EditController extends BaseController {
      * @param response
      * @param session
      * @param blogId
+     * @param postForm post的表单信息
      * @return
      */
-    @RequestMapping(value = "/updateBlog", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
+    @RequestMapping(value = "/updateBlog", params = {"blogId"}, method = RequestMethod.POST, produces = "application/json;charset=utf-8")
     @ResponseBody
     public String createNewBlog(HttpServletRequest request, HttpServletResponse response, HttpSession session,
-                                @RequestParam(value = "blogId", required = false) Integer blogId) {
+                               final String blogId, @RequestBody Map<String,String> postForm) {
         response.setContentType("application/json;charset=utf-8");
         response.setCharacterEncoding("utf-8");
-        //return editService.up(request, response).toString();
-        if (null == blogId || blogId < 0) {
+      //return editService.up(request, response).toString();
+        if (StringUtils.isEmpty(blogId)) {
             return ErrorCode.NOT_FOUND.toString();
         }
 
-        return editService.updateBlog(request, response, blogId).toString();
+        Integer id = 0;
+        try {
+            id = Integer.parseInt(blogId);
+            if (id < 0) {
+                return ErrorCode.NOT_FOUND.toString();
+            }
+        } catch (NumberFormatException e) {
+            return ErrorCode.NOT_FOUND.toString();
+        }
+        return editService.updateBlog(request, response, id, postForm).toString();
     }
 
 }

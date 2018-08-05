@@ -104,7 +104,8 @@ function submitFormAsync(target, errorHandler, successHandler, postData=target.s
 		data: postData,
 		dataType: "json",
 		headers: {
-			Accept: "application/json",
+			"Accept": "application/json",
+			"Content-Type": "application/json; charset=utf-8"
 		},
 		beforeSend: function () {
 			btn.text('Loading...');

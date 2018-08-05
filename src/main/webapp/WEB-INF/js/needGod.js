@@ -12,9 +12,11 @@ $(document).ready(function (event) {
 					.showBoxShortTime();
 				return;
 			}
-
+			
+			var postData = {}
+			postData['key'] = godKey;
 			submitFormAsync($("#needGodForm"), errorHandler,
-				succHandler);
+				succHandler, JSON.stringify(postData));
 		});
 
 });
