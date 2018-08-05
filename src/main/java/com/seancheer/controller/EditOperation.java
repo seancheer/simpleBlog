@@ -7,8 +7,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import com.seancheer.common.ErrorCode;
-import org.json.JSONObject;
+import com.seancheer.common.BaseOperation;
+import com.seancheer.common.BlogCode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,15 +24,16 @@ import com.seancheer.exception.BlogBaseException;
 import com.seancheer.service.interfaces.IEditService;
 
 /**
- * 编辑中心相关的操作
+ * 编辑中心相关的操作，负责修改，删除，创建功能，
+ * 查询功能，@see BlogOperation
  *
  * @author seancheer
  * @date 2018年3月2日
  */
 @Controller
-public class EditController extends BaseController {
+public class EditOperation extends BaseOperation {
 
-    private static final Logger logger = LoggerFactory.getLogger(EditController.class);
+    private static final Logger logger = LoggerFactory.getLogger(EditOperation.class);
 
     @Autowired
     private IEditService editService;
@@ -108,6 +109,43 @@ public class EditController extends BaseController {
         return editService.editBlog(response, session, blogId);
     }
 
+
+    /**
+     * 删除对应的博客
+     *
+     * @param request
+     * @param response
+     * @param session
+     * @param blogId
+     * @return
+     */
+    @RequestMapping(value = "/deleteBlog", method = RequestMethod.DELETE, produces = "application/json;charset=utf-8")
+    @ResponseBody
+    public String createNewBlog(HttpServletRequest request, HttpServletResponse response, HttpSession session,
+                                @RequestParam final String blogId, @RequestParam(required = false)final Integer fakeDelete) {
+        if (StringUtils.isEmpty(blogId)) {
+            return BlogCode.NOT_FOUND.toString();
+        }
+
+        Integer id = 0;
+        try {
+            id = Integer.parseInt(blogId);
+            if (id < 0) {
+                return BlogCode.NOT_FOUND.toString();
+            }
+        } catch (NumberFormatException e) {
+            return BlogCode.NOT_FOUND.toString();
+        }
+
+        //解析是否需要假删，0为假删，其他值为真正删除
+        boolean fake = true;
+        if (null != fakeDelete)
+        {
+            fake = (fakeDelete == 0);
+        }
+        return editService.deleteBlog(request, response, id, fake).toString();
+    }
+
     /**
      * 更新对应的博客
      *
@@ -126,17 +164,17 @@ public class EditController extends BaseController {
         response.setCharacterEncoding("utf-8");
       //return editService.up(request, response).toString();
         if (StringUtils.isEmpty(blogId)) {
-            return ErrorCode.NOT_FOUND.toString();
+            return BlogCode.NOT_FOUND.toString();
         }
 
         Integer id = 0;
         try {
             id = Integer.parseInt(blogId);
             if (id < 0) {
-                return ErrorCode.NOT_FOUND.toString();
+                return BlogCode.NOT_FOUND.toString();
             }
         } catch (NumberFormatException e) {
-            return ErrorCode.NOT_FOUND.toString();
+            return BlogCode.NOT_FOUND.toString();
         }
         return editService.updateBlog(request, response, id, postForm).toString();
     }

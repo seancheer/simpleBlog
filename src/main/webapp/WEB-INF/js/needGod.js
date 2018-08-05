@@ -4,7 +4,6 @@ $(document).ready(function (event) {
 	$('#godBtn').click(
 		function (event) {
 			event.preventDefault();
-			var btn = $(event.target);
 			var godKey = $('#key').val().trim();
 			if (godKey === "" || godKey.length <= 10) {
 				console.info("Invalid key!");

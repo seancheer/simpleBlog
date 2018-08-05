@@ -3,6 +3,7 @@ package com.seancheer.controller;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.seancheer.common.BaseOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,15 +18,15 @@ import com.seancheer.exception.BlogBaseException;
 import com.seancheer.service.interfaces.IBlogService;
 
 /**
- * passage相关的展示
+ * passage相关的展示，只负责查询相关的功能
  * 
  * @author seancheer
  * @date 2018年3月2日
  */
 @Controller
-public class BlogController extends BaseController {
+public class BlogOperation extends BaseOperation {
 
-	private static final Logger logger = LoggerFactory.getLogger(BlogController.class);
+	private static final Logger logger = LoggerFactory.getLogger(BlogOperation.class);
 
 	@Autowired
 	private IBlogService blogService;

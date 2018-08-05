@@ -1,6 +1,6 @@
 package com.seancheer.exception;
 
-import com.seancheer.common.ErrorCode;
+import com.seancheer.common.BlogCode;
 
 /**
  * 用户不存在异常
@@ -18,8 +18,8 @@ public class UserNotExistsException extends BlogBaseException {
 		;
 	}
 
-	public UserNotExistsException(ErrorCode errorCode) {
-		super(errorCode);
+	public UserNotExistsException(BlogCode blogCode) {
+		super(blogCode);
 	}
 
 	public UserNotExistsException(String msg) {

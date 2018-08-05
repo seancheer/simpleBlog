@@ -1,6 +1,6 @@
 package com.seancheer.exception;
 
-import com.seancheer.common.ErrorCode;
+import com.seancheer.common.BlogCode;
 
 /**
  * 博客系统的基本异常类
@@ -18,17 +18,17 @@ public class BlogBaseException extends Exception {
 	
 	private Throwable cause;
 	
-	private ErrorCode errorCode;
+	private BlogCode blogCode;
 	
 	public BlogBaseException()
 	{
 		;
 	}
 	
-	public BlogBaseException(ErrorCode errorCode)
+	public BlogBaseException(BlogCode blogCode)
 	{
-		this.errorCode = errorCode;
-		this.message = errorCode.getMsg();
+		this.blogCode = blogCode;
+		this.message = blogCode.getMsg();
 	}
 	
 	public BlogBaseException(String msg)
@@ -64,12 +64,12 @@ public class BlogBaseException extends Exception {
 		this.cause = cause;
 	}
 
-	public ErrorCode getErrorCode() {
-		return errorCode;
+	public BlogCode getBlogCode() {
+		return blogCode;
 	}
 
-	public void setErrorCode(ErrorCode errorCode) {
-		this.errorCode = errorCode;
+	public void setBlogCode(BlogCode blogCode) {
+		this.blogCode = blogCode;
 	}
 
 }

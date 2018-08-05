@@ -8,6 +8,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.seancheer.common.BaseOperation;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,8 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.seancheer.common.BlogConfigImpl;
-import com.seancheer.common.ErrorCode;
-import com.seancheer.controller.BaseController;
+import com.seancheer.common.BlogCode;
 import com.seancheer.dao.entity.BaseCategory;
 import com.seancheer.dao.entity.Category1;
 import com.seancheer.dao.entity.Passage;
@@ -33,7 +33,7 @@ import com.seancheer.service.interfaces.IBlogService;
  * @author seancheer
  * @date 2018年4月13日
  */
-public class BlogServiceImpl extends BaseController implements IBlogService {
+public class BlogServiceImpl extends BaseOperation implements IBlogService {
 
 	private static final Logger logger = LoggerFactory.getLogger(BlogServiceImpl.class);
 
@@ -53,7 +53,7 @@ public class BlogServiceImpl extends BaseController implements IBlogService {
 			allCategories = category1Dao.queryAllRecord();
 		} catch (BlogBaseException e) {
 			logger.error("Query all categories failed!", e);
-			return ErrorCode.INTERNAL_ERROR.toString();
+			return BlogCode.INTERNAL_ERROR.toString();
 		}
 
 		PrintWriter writer = null;
@@ -68,7 +68,7 @@ public class BlogServiceImpl extends BaseController implements IBlogService {
 			}
 		} catch (IOException e) {
 			logger.error("Get writer failed!", e);
-			return ErrorCode.INTERNAL_ERROR.toString();
+			return BlogCode.INTERNAL_ERROR.toString();
 		} finally {
 			if (null != writer) {
 				writer.flush();

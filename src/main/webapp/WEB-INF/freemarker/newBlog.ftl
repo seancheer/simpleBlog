@@ -4,9 +4,9 @@
 <#include "template/header.ftl">
 <link rel="stylesheet" type='text/css' href="css/editormd.css" />
 <link rel="stylesheet" type='text/css' href="css/new-blog.css" />
-<script src="js/editor/editormd.min.js"></script>
-<script src="js/newBlog.js"></script>
-    
+<script type="text/javascript" src="js/newBlog.js"></script>
+<script type="text/javascript" src="js/editor/editormd.min.js"></script>
+
 <body class="home">
 
     <div id="la-wrapper" style="border-color:#000000;">
@@ -33,6 +33,7 @@
                         <span class='title-span'>标题：</span>
                         <input id='blogTitle' name='blogTitle' class='form-control title-input' type='text' placeholder="请输入标题">
                     </div>
+
                     <div id="blogEditorDiv">
                         <textarea id='blogContent' name='blogContent' style="display:none;" placeholder="请输入内容"></textarea>
                     </div>
@@ -45,7 +46,7 @@
                                 height: 640,
                                 syncScrolling: "single",
                                 path: "js/editor/lib/",
-                                saveHTMLToTextarea : true
+
                             });
 
                         });

@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 
 import com.seancheer.common.BlogConstants;
-import com.seancheer.common.ErrorCode;
+import com.seancheer.common.BlogCode;
 import com.seancheer.controller.vo.NeedGodReq;
 import com.seancheer.dao.entity.User;
 import com.seancheer.dao.interfaces.UserDao;
@@ -58,19 +58,19 @@ public class GodServiceImpl implements IGodService {
 				genSessionAndMakeCookie(response, session);
 
 			} catch (UserNotExistsException e) {
-				return ErrorCode.USER_NOT_EXISTS.toJson().toString();
+				return BlogCode.USER_NOT_EXISTS.toJson().toString();
 			} catch (BlogBaseException e) {
 				logger.error("GenSessionAndMakeCookie failed!", e);
-				return ErrorCode.INTERNAL_ERROR.toJson().toString();
+				return BlogCode.INTERNAL_ERROR.toJson().toString();
 			}
 
-			JSONObject succObject = ErrorCode.LOGIN_SUCCESS.toJson();
+			JSONObject succObject = BlogCode.LOGIN_SUCCESS.toJson();
 			succObject.put(BlogConstants.REDIRECT, blogListUri);
 			return succObject.toString();
 		}
 
 		response.setStatus(HttpStatus.FORBIDDEN.value());
-		return ErrorCode.INVALID_KEY.toString();
+		return BlogCode.INVALID_KEY.toString();
 	}
 
 	/**

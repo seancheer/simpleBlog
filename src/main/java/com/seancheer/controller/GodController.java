@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.seancheer.common.ErrorCode;
+import com.seancheer.common.BlogCode;
 import com.seancheer.controller.vo.NeedGodReq;
 import com.seancheer.service.interfaces.IGodService;
 
@@ -50,7 +50,7 @@ public class GodController {
 		if (StringUtils.isEmpty(needGodReq.getKey())) {
 			logger.info("Invalid key. Verifing failed! key:" + needGodReq.getKey());
 			response.setStatus(HttpStatus.FORBIDDEN.value());
-			return ErrorCode.INVALID_KEY.toString();
+			return BlogCode.INVALID_KEY.toString();
 		}
 
 		return godService.godEntrance(needGodReq, response, session);

@@ -1,6 +1,6 @@
 package com.seancheer.exception;
 
-import com.seancheer.common.ErrorCode;
+import com.seancheer.common.BlogCode;
 
 /**
  * 解析config文件失败
@@ -19,8 +19,8 @@ public class ParseConfigException extends BlogBaseException {
 		;
 	}
 
-	public ParseConfigException(ErrorCode errorCode) {
-		super(errorCode);
+	public ParseConfigException(BlogCode blogCode) {
+		super(blogCode);
 	}
 
 	public ParseConfigException(String msg) {

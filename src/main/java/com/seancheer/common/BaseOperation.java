@@ -1,4 +1,4 @@
-package com.seancheer.controller;
+package com.seancheer.common;
 
 import org.springframework.web.servlet.ModelAndView;
 
@@ -8,7 +8,7 @@ import org.springframework.web.servlet.ModelAndView;
  * @author seancheer
  * @date 2018年3月24日
  */
-public class BaseController {
+public class BaseOperation {
 
 	/**
 	 * 重定向到500页面

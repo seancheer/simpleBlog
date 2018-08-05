@@ -29,23 +29,16 @@ public interface IEditService {
 	 */
 	JSONObject createNewBlog(HttpServletRequest request, HttpServletResponse response, Map<String,String> postForm);
 
-	/**
-	 * 通过博客id查询博客
-	 * 
-	 * @param blogId
-	 * @param response
-	 * @return
-	 */
-	JSONObject queryBlog(String blogId, HttpServletResponse response);
 
 	/**
 	 * 通过博客id删除博客
-	 * 
-	 * @param blogId
+	 * @param request
 	 * @param response
+	 * @param blogId
+     * @param fakeDelete 是否假删
 	 * @return
 	 */
-	JSONObject deleteBlog(String blogId, HttpServletResponse response);
+	JSONObject deleteBlog(HttpServletRequest request, HttpServletResponse response, Integer blogId, boolean fakeDelete);
 	
 	/**
 	 * 编辑blog页面

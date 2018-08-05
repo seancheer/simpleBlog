@@ -1,5 +1,6 @@
 package com.seancheer.controller;
 
+import com.seancheer.common.BaseOperation;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -10,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
  * @date 2018年4月14日
  */
 @Controller
-public class HttpStatusController extends BaseController{
+public class HttpStatusOperation extends BaseOperation {
 	/**
 	 * 500
 	 * 

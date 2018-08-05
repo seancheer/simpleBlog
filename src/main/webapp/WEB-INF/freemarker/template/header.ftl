@@ -1,5 +1,5 @@
 <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <link rel="profile" href="http://gmpg.org/xfn/11">
     <link rel="shortcut icon" href="" />
@@ -23,20 +23,20 @@
     </style>
 
     <!-- css -->
-    <link rel='stylesheet' id='parent-theme-css-css' type='text/css' href='css/content.css' type='text/css' media='all' />
-    <link rel='stylesheet' id='parent-theme-css-css' type='text/css' href='css/navmenu.css' type='text/css' media='all' />
-    <link rel='stylesheet' id='parent-theme-css-css' type='text/css' href='css/passage.css' type='text/css' media='all' />
-    <link rel='stylesheet' id='parent-theme-css-css' type='text/css' href='css/common.css' type='text/css' media='all' />
-    <link rel='stylesheet' id='parent-theme-css-css' type='text/css' href='css/popup.css' type='text/css' media='all' />
-
+    <link rel='stylesheet' id='parent-theme-css-css' type='text/css' href='css/content.css' media='all' />
+    <link rel='stylesheet' id='parent-theme-css-css' type='text/css' href='css/navmenu.css' media='all' />
+    <link rel='stylesheet' id='parent-theme-css-css' type='text/css' href='css/passage.css' media='all' />
+    <link rel='stylesheet' id='parent-theme-css-css' type='text/css' href='css/common.css' media='all' />
+    <link rel='stylesheet' id='parent-theme-css-css' type='text/css' href='css/popup.css' media='all' />
 
     <link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.3.0/css/bootstrap.min.css">
-    <script src="http://cdn.bootcss.com/jquery/1.11.1/jquery.min.js"></script>
-    <script src="http://cdn.bootcss.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
-    <script src="js/common.js"></script>
-    <script src="js/popupMsgBox.js"></script>
-    <script src="js/navmenuBuilder.js"></script>
-    
+    <script type="text/javascript" src="http://cdn.bootcss.com/jquery/1.11.1/jquery.min.js"></script>
+    <script type="text/javascript" src="http://cdn.bootcss.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+
+    <script type="text/javascript" src="js/common.js"></script>
+    <script type="text/javascript" src="js/popupMsgBox.js"></script>
+    <script type="text/javascript" src="js/navmenuBuilder.js"></script>
+
 </head>
 
 <style type="text/css">
