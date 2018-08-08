@@ -24,18 +24,19 @@ import com.seancheer.service.interfaces.IBlogService;
  * @date 2018年3月2日
  */
 @Controller
-public class BlogOperation extends BaseOperation {
+public class BlogController extends BaseOperation {
 
-	private static final Logger logger = LoggerFactory.getLogger(BlogOperation.class);
+	private static final Logger logger = LoggerFactory.getLogger(BlogController.class);
 
 	@Autowired
 	private IBlogService blogService;
 
-	/**
-	 * 获取所有分类的controller
-	 * 
-	 * @param key
-	 */
+    /**
+     * 获取所有分类的controller
+     * @param response
+     * @param session
+     * @return
+     */
 	@RequestMapping(value = "/getAllCategoies", method = RequestMethod.GET)
 	@ResponseBody
 	public String getAllCategoies(HttpServletResponse response, HttpSession session) {
@@ -55,7 +56,10 @@ public class BlogOperation extends BaseOperation {
 			@RequestParam(value = "page", required = false) Long page,
 			@RequestParam(value = "categoryId", required = false) String categoryIds) {
 		try {
-			return blogService.getBlogList(response, page, categoryIds);
+			ModelAndView view = blogService.getBlogList(response, page, categoryIds);
+			//TODO 以后需要根据session里面的信息来决定是否为god
+			view.addObject("isGod", true);
+			return view;
 		} catch (BlogBaseException e) {
 			logger.error("GetBlogList failed!", e);
 			return redirect500View();

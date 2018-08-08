@@ -25,15 +25,15 @@ import com.seancheer.service.interfaces.IEditService;
 
 /**
  * 编辑中心相关的操作，负责修改，删除，创建功能，
- * 查询功能，@see BlogOperation
+ * 查询功能，@see BlogController
  *
  * @author seancheer
  * @date 2018年3月2日
  */
 @Controller
-public class EditOperation extends BaseOperation {
+public class EditBlogController extends BaseOperation {
 
-    private static final Logger logger = LoggerFactory.getLogger(EditOperation.class);
+    private static final Logger logger = LoggerFactory.getLogger(EditBlogController.class);
 
     @Autowired
     private IEditService editService;

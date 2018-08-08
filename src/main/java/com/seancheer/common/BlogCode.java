@@ -9,18 +9,8 @@ import org.json.JSONObject;
  **/
 public enum BlogCode {
 
-    //成功相关的标志码
-    /*
-     * 输入的key正确，校验成功！
-     */
-    SUCCESS(1000, "操作成功！"),
-
-    LOGIN_SUCCESS(1001, "验证成功！"),
-
-    POST_SUCCESS(1002, "发表成功！"),
-
-    FAVOR_SUCCESS(1003, "点赞成功！"),
-
+    //成功相关的标志码，如果这里修改，那么前端相应的代码也需要修改
+    SUCCESS(1000, "成功！"),
 
     //失败相关的错误码
     FAILED(100, "操作失败！"),

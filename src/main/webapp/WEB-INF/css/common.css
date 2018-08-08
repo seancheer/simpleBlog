@@ -25,3 +25,7 @@
     margin-left: 1rem;
 }
 
+.danger-span{
+    color: red;
+    font-weight: bold;
+}

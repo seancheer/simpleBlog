@@ -1,6 +1,6 @@
 window.counter = 0; // 全局唯一的计数器，用来生成一些唯一dom id会用到
 window.code = {
-	"SUCCESS": 100
+	"SUCCESS": 1000,
 }
 
 /*---------------  一些通用的方法 ---------------*/
@@ -63,44 +63,65 @@ function succHandler(msgJson) {
 
 	if (msgJson.redirect != undefined) {
 		console.log("Need redirecting:" + msgJson.redirect);
-		setTimeout(function(){
+		setTimeout(function () {
 			window.location.replace(msgJson.redirect);
 		}, 500);
 	}
-	else if(msgJson.href != undefined)
-	{
+	else if (msgJson.href != undefined) {
 		console.log("Need href:" + msgJson.href);
-		setTimeout(function(){
+		setTimeout(function () {
 			window.location.href = msgJson.href;
 		}, 500);
 	}
-	else{
+	else {
 		//
 	}
 }
 
 /**
- * 异步提交表单数据 errorHandler和successHandler必须拥有一个字符串参数
- * 
- * @returns
+ * 异步发送DELETE ajax请求
+ * @param {目标选单} target 
+ * @param {ajax出错时候的处理方法} errorHandler 
+ * @param {ajax成功时候的处理方法} successHandler 
  */
-function submitFormAsync(target, errorHandler, successHandler, postData=target.serialize()) {
-	if (target == undefined) {
+function deleteAsync(errorHandler, successHandler, okButton, url) {
+	submitAsync(errorHandler, successHandler, undefined, okButton, url, 'DELETE');
+}
+
+
+/**
+ * 异步发送ajax请求
+ * @param {目标选单} target 
+ * @param {ajax出错时候的处理方法} errorHandler 
+ * @param {ajax成功时候的处理方法} successHandler 
+ * @param {ajax的数据} postData 
+ */
+function submitFormAsync(target, errorHandler, successHandler, postData) {
+	if (target === undefined || postData === undefined) {
 		console.error("Target can not be undefined! Please check!");
 		return;
 	}
 
+	submitAsync(errorHandler, successHandler, postData, target.find('[type=submit]'),
+		target.prop('action'), target.prop('method'));
+}
+
+
+/**
+ * 异步提交表单数据 errorHandler和successHandler必须拥有一个字符串参数
+ * @returns
+ */
+function submitAsync(errorHandler, successHandler, postData, okButton, url, method) {
 	errorHandler = (errorHandler == undefined ? defaultErrorHandler
 		: errorHandler);
 	successHandler = (successHandler == undefined ? defaultSuccHandler
 		: successHandler);
-	var btn = target.find('[type=submit]');
-	var oldText = btn.text();
-	console.log("OldText:" + oldText);
 
+	var oldText = okButton.text();
+	console.log("url:" + url + "   method:" + method + "  oldText:" + oldText);
 	$.ajax({
-		url: target.prop('action'),
-		type: target.prop('method'),
+		url: url,
+		type: method,
 		data: postData,
 		dataType: "json",
 		headers: {
@@ -108,8 +129,8 @@ function submitFormAsync(target, errorHandler, successHandler, postData=target.s
 			"Content-Type": "application/json; charset=utf-8"
 		},
 		beforeSend: function () {
-			btn.text('Loading...');
-			btn.prop('disabled', 'disabled');
+			okButton.text('Loading...');
+			okButton.prop('disabled', 'disabled');
 		},
 
 		error: function (request, textStatus, errorThrown) {
@@ -136,8 +157,8 @@ function submitFormAsync(target, errorHandler, successHandler, postData=target.s
 		},
 
 		complete: function () {
-			btn.text(oldText);
-			btn.prop('disabled', '');
+			okButton.text(oldText);
+			okButton.prop('disabled', '');
 		}
 	});
 }
@@ -148,50 +169,49 @@ function submitFormAsync(target, errorHandler, successHandler, postData=target.s
  * @param {获取分类的url} getAllCategoriesUrl 
  */
 function ajaxCategories(getAllCategoriesUrl, forceUpdate = false) {
-	if (!forceUpdate && window.allCategories != undefined && window.allCategories.length > 0)
-	{
+	if (!forceUpdate && window.allCategories != undefined && window.allCategories.length > 0) {
 		return;
 	}
 
-    $.ajax({
-        url: getAllCategoriesUrl,
-        type: "GET",
-        dataType: "json",
-        async: false,
-        headers: {
-            Accept: "application/json",
-        },
-        beforeSend: function () {
-            console.log("before sending....");
-        },
+	$.ajax({
+		url: getAllCategoriesUrl,
+		type: "GET",
+		dataType: "json",
+		async: false,
+		headers: {
+			Accept: "application/json",
+		},
+		beforeSend: function () {
+			console.log("before sending....");
+		},
 
-        error: function (request, textStatus, errorThrown) {
-            var jsonMsg = JSON.parse('{}');
+		error: function (request, textStatus, errorThrown) {
+			var jsonMsg = JSON.parse('{}');
 
-            if (textStatus.indexOf('timeout') > -1 || textStatus.indexOf('abort') > -1) {
-                jsonMsg["textStatus"] = textStatus;
-                console.error(jsonMsg);
-                return;
-            }
+			if (textStatus.indexOf('timeout') > -1 || textStatus.indexOf('abort') > -1) {
+				jsonMsg["textStatus"] = textStatus;
+				console.error(jsonMsg);
+				return;
+			}
 
-            try {
-                jsonMsg = JSON.parse(request.responseText);
-            } catch (err) {
-                console.error("Parse json failed. responseText:" + request.responseText);
-            }
+			try {
+				jsonMsg = JSON.parse(request.responseText);
+			} catch (err) {
+				console.error("Parse json failed. responseText:" + request.responseText);
+			}
 
-            jsonMsg["textStatus"] = textStatus;
-            console.error(jsonMsg);
-        },
+			jsonMsg["textStatus"] = textStatus;
+			console.error(jsonMsg);
+		},
 
-        success: function (data) {
-            window.allCategories = data;
-        },
+		success: function (data) {
+			window.allCategories = data;
+		},
 
-        complete: function () {
-            console.log("complete....");
-        }
-    });
+		complete: function () {
+			console.log("complete....");
+		}
+	});
 }
 
 
@@ -199,11 +219,9 @@ function ajaxCategories(getAllCategoriesUrl, forceUpdate = false) {
 /**
  * 准备博客顶部的菜单栏
  */
-function prepareNavmenu()
-{
+function prepareNavmenu() {
 	ajaxCategories("/getAllCategoies");
-	if (undefined === window.allCategories || window.allCategories.length == 0)
-	{
+	if (undefined === window.allCategories || window.allCategories.length == 0) {
 		console.warn("Error or empty categories:" + window.allCategories);
 		return;
 	}

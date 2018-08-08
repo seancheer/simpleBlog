@@ -30,6 +30,23 @@
     </div>
 </div>
 
+<!-- 提示框-->
+<div class="modal fade" id="infoModal" tabindex="-1" role="dialog" aria-labelledby="infoModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title" id="infoModalLabel">default</h4>
+            </div>
+            <div class="modal-body">default</div>
+            <div class="modal-footer">
+                <button type="button" name="btnCancel" class="btn btn-default" data-dismiss="modal">取消</button>
+                <button type="button" name="btnOK" class="btn btn-primary">确认</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script type="text/javascript">
     $(document).ready(function () {
 

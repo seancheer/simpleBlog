@@ -4,8 +4,10 @@
 <#include "template/header.ftl">
 <link rel='stylesheet' id='parent-theme-css-css' type='text/css' href='css/god-toolbar.css' type='text/css' media='all' />
 
+<#if (isGod?? && isGod)>
 <!-- 判断是否为god相关的渲染的页面，在决定是否需要包含以下js -->
 <script type="text/javascript" src="js/godOp.js"></script>
+</#if>
 
 <body class="home">
     <div id="la-wrapper" style="border-color:#000000;">
@@ -76,7 +78,7 @@
                                 <span>阅读(${blog.readCount})</span>
                                 <span>评论(${blog.commentCount})</span>
                                 <a href="/editBlog?blogId=${blog.id}">编辑</a>
-                                <a id="delBlog${blog.id}" href="deleteBlog?blogId=${blog.id}">删除</a>
+                                <a id="delBlogFake${blog.id}" href="deleteBlog?blogId=${blog.id}">删除</a>
                                 <a id="delBlog${blog.id}" href="deleteBlog?blogId=${blog.id}&fakeDelete=1">彻底删除</a>
                             </div>
                             <div class='clear'></div>

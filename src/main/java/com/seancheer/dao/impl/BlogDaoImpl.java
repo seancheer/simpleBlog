@@ -67,6 +67,7 @@ public class BlogDaoImpl extends BaseDaoImpl<Passage> implements BlogDao {
 	 * 删除某条记录，这里是fakeDelete，并不真正删除。
 	 */
 	@Override
+	@Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.READ_COMMITTED)
 	public void deleteRecordFake(Passage rec) throws BlogBaseException {
 		rec.setIsDel((byte)1);
 		updateRecord(rec);

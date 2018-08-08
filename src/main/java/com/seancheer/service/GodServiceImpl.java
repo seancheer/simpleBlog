@@ -64,7 +64,7 @@ public class GodServiceImpl implements IGodService {
 				return BlogCode.INTERNAL_ERROR.toJson().toString();
 			}
 
-			JSONObject succObject = BlogCode.LOGIN_SUCCESS.toJson();
+			JSONObject succObject = BlogCode.SUCCESS.toJson();
 			succObject.put(BlogConstants.REDIRECT, blogListUri);
 			return succObject.toString();
 		}

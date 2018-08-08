@@ -14,6 +14,9 @@ import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -89,7 +92,7 @@ public class EditServiceImpl extends BaseOperation implements IEditService {
             return BlogCode.SERVER_BUSY.toJson();
         }
 
-        JSONObject result = BlogCode.POST_SUCCESS.toJson();
+        JSONObject result = BlogCode.SUCCESS.toJson();
         result.put(BlogConstants.HREF, "/blogList");
         return result;
     }
@@ -103,6 +106,7 @@ public class EditServiceImpl extends BaseOperation implements IEditService {
      * @param fakeDelete 是否假删
      * @return
      */
+    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.READ_COMMITTED)
     public JSONObject deleteBlog(HttpServletRequest request, HttpServletResponse response, Integer blogId, boolean fakeDelete) {
         try {
             Passage passage = passageDao.queryRecordById(blogId);
@@ -116,9 +120,12 @@ public class EditServiceImpl extends BaseOperation implements IEditService {
                 passageDao.deleteRecord(passage);
             }
 
-            return BlogCode.SUCCESS.toJson();
+            JSONObject result =  BlogCode.SUCCESS.toJson();
+            result.put(BlogConstants.HREF, "/blogList");
+            return result;
         } catch (BlogBaseException e) {
             logger.error("Operation to database failed! blogId:{} fakeDelete:{}", blogId, fakeDelete);
+            logger.error("Operation to datebase failed!", e);
             return BlogCode.INTERNAL_ERROR.toJson();
         }
     }
@@ -282,7 +289,7 @@ public class EditServiceImpl extends BaseOperation implements IEditService {
             return BlogCode.SERVER_BUSY.toJson();
         }
 
-        JSONObject result = BlogCode.POST_SUCCESS.toJson();
+        JSONObject result = BlogCode.SUCCESS.toJson();
         // 跳转到博客详情页
         result.put(BlogConstants.HREF, "/blog?blogId=" + passage.getId());
         return result;

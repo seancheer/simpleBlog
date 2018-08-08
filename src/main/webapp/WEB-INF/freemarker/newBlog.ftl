@@ -46,7 +46,7 @@
                                 height: 640,
                                 syncScrolling: "single",
                                 path: "js/editor/lib/",
-
+                                saveHTMLToTextarea : true
                             });
 
                         });
