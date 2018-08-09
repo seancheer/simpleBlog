@@ -39,4 +39,10 @@ public class BlogConstants {
 
 	public static final String BLOG_BACKUP_DIR = "blog.backup.dir";
 
+	public static final String MAIL_HOST = "mail.host";
+
+	public static final String BLOG_MAIL_HOST = "blog.mail.host";
+
+	public static final String MAIL_AUTH = "mail.smtp.auth";
+
 }

@@ -28,6 +28,7 @@
 		<javax.validation.version>2.0.0.Final</javax.validation.version>
 		<hibernate.validator.version>5.2.1.Final</hibernate.validator.version>
 		<json.version>20171018</json.version>
+		<mail.version>1.4.4</mail.version>
 	</properties>
 
 	<dependencies>
@@ -147,6 +148,11 @@
 			<version>${json.version}</version>
 		</dependency>
 
+		<dependency>
+			<groupId>javax.mail</groupId>
+			<artifactId>mail</artifactId>
+			<version>${mail.version}</version>
+		</dependency>
 	</dependencies>
 
 
