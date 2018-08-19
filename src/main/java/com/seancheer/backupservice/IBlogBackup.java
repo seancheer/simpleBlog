@@ -1,5 +1,6 @@
 package com.seancheer.backupservice;
 
+import com.seancheer.common.BlogConstants;
 import com.seancheer.dao.entity.Passage;
 
 /**
@@ -9,12 +10,6 @@ import com.seancheer.dao.entity.Passage;
  * @date 2018年6月9日
  */
 public interface IBlogBackup {
-
-    //指定backup的方式，目前仅支持email一种方式
-    static final String BLOG_BACKUP_METHOD = "blog.backup.method";
-
-    //默认采用email的备份方式
-    static final BakcupMethod DEFEAULT_BACKUP_METHOD = BakcupMethod.valueOf("email");
 
     //需要备份的地址
     static final String BLOG_BACKUP_EMAIL_ADDRESS = "blog.backup.emailaddress";
@@ -28,7 +23,17 @@ public interface IBlogBackup {
     //收件人的邮件凭据
     static final String BACKUP_MAIL_SENDER_PWD = "blog.backup.mail.sender.pwd";
 
+    //本地备份地址
     static final String BACKUP_LOCAL_PATH = "blog.backup.local.path";
+
+    //立即备份的文件夹，绝对路径为local_path/immediatly
+    static final String BAKCUP_IMMEDIATLY_DIR = "immediatly";
+
+    //存档的文件夹，真正的路径为local_path/archive
+    static final String BAKCUP_ARCHIVE_DIR = "archive";
+
+    //默认的备份地址
+    static String DEFAULT_LOCAL_PATH = BlogConstants.BACKUP_LOCAL_PATH;
 
     /**
      * 立即进行备份

@@ -1,9 +1,12 @@
 package com.seancheer.utils;
 
+import com.seancheer.common.BlogConfigImpl;
 import com.seancheer.common.BlogConstants;
+import com.seancheer.common.IBlogConfig;
 import com.seancheer.exception.BlogBaseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.util.StringUtils;
 
 import javax.crypto.*;
 import java.io.UnsupportedEncodingException;
@@ -22,13 +25,34 @@ public class AESHelper {
 
     private static final String ALGORITHM = "AES";
 
+    private static final String DEFAULT_SECRET_KEY = "seancheer'ssecretkey";
+
+    public static String blogSecretKey = DEFAULT_SECRET_KEY;
+
+    static {
+        initKeys();
+    }
+
+
+    /**
+     * 加密，使用系统默认的key
+     *
+     * @param source
+     * @return
+     * @throws BlogBaseException
+     */
+    public static String encrypt(String source) throws BlogBaseException {
+        return encrypt(source, blogSecretKey);
+    }
+
+
     /**
      * 加密
      *
      * @param source
-     * @param key 加解密的key应当一致
+     * @param key    加解密的key应当一致
      */
-    public static String encrypt(String source, String key) throws BlogBaseException {
+    private static String encrypt(String source, String key) throws BlogBaseException {
         try {
             Key secretKey = getKey(key);
             Cipher cipher = Cipher.getInstance(ALGORITHM);
@@ -44,14 +68,25 @@ public class AESHelper {
         }
     }
 
+
+    /**
+     * 使用密钥对密文进行解密：使用系统默认的key
+     *
+     * @param encryptText
+     * @return
+     */
+    public static String decrypt(String encryptText) throws BlogBaseException {
+        return decrypt(encryptText, blogSecretKey);
+    }
+
     /**
      * 使用密钥对密文进行解密
      *
      * @param encryptText
-     * @param key 加解密的key应当一致
+     * @param key         加解密的key应当一致
      * @return
      */
-    public static String decrypt(String encryptText, String key) throws BlogBaseException {
+    private static String decrypt(String encryptText, String key) throws BlogBaseException {
         try {
             Key secretKey = getKey(key);
             Base64.Decoder decoder = Base64.getDecoder();
@@ -83,16 +118,29 @@ public class AESHelper {
 
     /**
      * 测试加解密方法是否正常工作
+     *
      * @param args
      * @throws BlogBaseException
      */
     public static void main(String[] args) throws BlogBaseException {
-    	final String DEFAULT_SECRET_KEY = "seancheer'ssecretkey";
+        final String DEFAULT_SECRET_KEY = "seancheer'ssecretkey";
         String key = DEFAULT_SECRET_KEY;
-        String plainText = "hellohelloo";
-        String encryptText = AESHelper.encrypt(plainText,key);
+        String plainText = "helloworld";
+        String encryptText = AESHelper.encrypt(plainText, key);
         System.out.println(encryptText);
 
-        System.out.println(AESHelper.decrypt(encryptText,key));
+        System.out.println(AESHelper.decrypt(encryptText, key));
+    }
+
+    /**
+     * 初始化secret key
+     */
+    private static void initKeys() {
+        IBlogConfig blogConfig = BlogConfigImpl.getInstance();
+
+        blogSecretKey = blogConfig.getValue(BlogConstants.BLOG_AES_KEY);
+        if (StringUtils.isEmpty(blogSecretKey)) {
+            blogSecretKey = DEFAULT_SECRET_KEY;
+        }
     }
 }

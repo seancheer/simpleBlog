@@ -20,8 +20,8 @@ import org.xml.sax.SAXException;
 import com.seancheer.exception.ParseConfigException;
 
 /**
- * blog读取配置文件相关的类
- * 
+ * blog读取配置文件相关的类，该类不由spring进行注入，
+ * 采取手动的单例模式，因为有些工厂类需要直接使用该对象
  * @author seancheer
  * @date 2018年3月20日
  */
@@ -29,7 +29,30 @@ public class BlogConfigImpl implements IBlogConfig {
 
 	private static final Logger logger = LoggerFactory.getLogger(BlogConfigImpl.class);
 
+	private static final BlogConfigImpl INSTANCE = new BlogConfigImpl();
+
 	private Map<String, String> configMap;
+
+    /**
+     * 获取单例对象
+     * @return
+     */
+	public static IBlogConfig getInstance()
+    {
+        return INSTANCE;
+    }
+
+    /**
+     * 构造方法
+     */
+	private BlogConfigImpl()
+    {
+        try {
+            init();
+        } catch (FileNotFoundException | ParseConfigException | ParserConfigurationException e) {
+            throw new RuntimeException("Init config failed" , e);
+        }
+    }
 
 	@Override
 	public void init() throws FileNotFoundException, ParserConfigurationException, ParseConfigException {

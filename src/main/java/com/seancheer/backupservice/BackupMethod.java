@@ -5,14 +5,14 @@ package com.seancheer.backupservice;
  * @author: seancheer
  * @date: 2018/8/10
  **/
-public enum BakcupMethod {
+public enum BackupMethod {
     EMAIL("email");
 
 
     private String name;
 
 
-    private BakcupMethod(String name)
+    private BackupMethod(String name)
     {
         this.name = name;
     }

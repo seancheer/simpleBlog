@@ -1,6 +1,7 @@
 package com.seancheer.utils;
 
 import com.seancheer.common.BlogConstants;
+import com.seancheer.exception.BlogBaseException;
 import com.seancheer.exception.SendingEmailExceptioin;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,8 +10,21 @@ import org.springframework.util.StringUtils;
 import javax.activation.DataHandler;
 import javax.activation.DataSource;
 import javax.activation.FileDataSource;
-import javax.mail.*;
-import javax.mail.internet.*;
+import javax.mail.Address;
+import javax.mail.Authenticator;
+import javax.mail.BodyPart;
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.Multipart;
+import javax.mail.PasswordAuthentication;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.AddressException;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeBodyPart;
+import javax.mail.internet.MimeMessage;
+import javax.mail.internet.MimeMultipart;
+import javax.mail.internet.MimeUtility;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.UnsupportedEncodingException;
@@ -88,7 +102,7 @@ public class EmailUtils {
         };
 
         //创建发送账号的session，由于发送邮件属于长期备份，因此这里每次都创建新的session
-        Session session = Session.getDefaultInstance(props);
+        Session session = Session.getDefaultInstance(props, authenticator);
 
         //首先设置message的基本信息
         Message message = new MimeMessage(session);
@@ -142,7 +156,7 @@ public class EmailUtils {
      */
     private static BodyPart genTextPart(String content) throws MessagingException {
         BodyPart textPart = new MimeBodyPart();
-        textPart.setContent(textPart, DEFAULT_MIME_TYPE);
+        textPart.setContent(content, DEFAULT_MIME_TYPE);
         return textPart;
     }
 

@@ -8,7 +8,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.seancheer.backupservice.BackupFactory;
+import com.seancheer.backupservice.IBlogBackup;
 import com.seancheer.dao.entity.Category2;
+import org.apache.log4j.spi.ErrorCode;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.slf4j.Logger;
@@ -46,6 +49,9 @@ public class EditServiceImpl extends BaseOperation implements IEditService {
     @Autowired
     private Category2Dao category2Dao;
 
+    //当前系统生效的备份策略
+    private IBlogBackup blogBackup = BackupFactory.getCurrentBackup();
+
     @Override
     public JSONObject createNewBlog(HttpServletRequest request, HttpServletResponse response, Map<String, String> postForm) {
         if (null == postForm) {
@@ -56,7 +62,11 @@ public class EditServiceImpl extends BaseOperation implements IEditService {
             return BlogCode.PARAMETER_ERROR.toJson();
         }
 
-        return createNewBlogInternal(postForm, request, response);
+        try {
+            return createNewBlogInternal(postForm, request, response);
+        } catch (BlogBaseException e) {
+            return BlogCode.SERVER_BUSY.toJson();
+        }
     }
 
     /**
@@ -67,8 +77,9 @@ public class EditServiceImpl extends BaseOperation implements IEditService {
      * @param response
      * @return
      */
+    @Transactional(rollbackFor = BlogBaseException.class, propagation = Propagation.REQUIRED, isolation = Isolation.READ_UNCOMMITTED)
     private JSONObject createNewBlogInternal(Map<String, String> blogData, HttpServletRequest request,
-                                             HttpServletResponse response) {
+                                             HttpServletResponse response) throws BlogBaseException {
         String blogTitle = blogData.get(BlogConstants.KEY_BLOG_TITLE);
         String blogContent = blogData.get(BlogConstants.KEY_BLOG_CONTENT);
         Byte category1 = Byte.parseByte(blogData.get(BlogConstants.KEY_BLOG_CATEGORY_0));
@@ -90,6 +101,11 @@ public class EditServiceImpl extends BaseOperation implements IEditService {
         } catch (BlogBaseException e) {
             logger.error("Saving blog failed!", e);
             return BlogCode.SERVER_BUSY.toJson();
+        }
+
+        if (!blogBackup.backupImmediatly(passage)) {
+            logger.error("Backuping the passage failed! title:" + passage.getTitle());
+            throw new BlogBaseException();
         }
 
         JSONObject result = BlogCode.SUCCESS.toJson();
@@ -120,7 +136,7 @@ public class EditServiceImpl extends BaseOperation implements IEditService {
                 passageDao.deleteRecord(passage);
             }
 
-            JSONObject result =  BlogCode.SUCCESS.toJson();
+            JSONObject result = BlogCode.SUCCESS.toJson();
             result.put(BlogConstants.HREF, "/blogList");
             return result;
         } catch (BlogBaseException e) {
@@ -242,7 +258,11 @@ public class EditServiceImpl extends BaseOperation implements IEditService {
             return BlogCode.PARAMETER_ERROR.toJson();
         }
 
-        return updateBlogInternal(postForm, request, blogId);
+        try {
+            return updateBlogInternal(postForm, request, blogId);
+        } catch (BlogBaseException e) {
+            return BlogCode.SERVER_BUSY.toJson();
+        }
     }
 
     /**
@@ -253,7 +273,8 @@ public class EditServiceImpl extends BaseOperation implements IEditService {
      * @param blogId
      * @return
      */
-    private JSONObject updateBlogInternal(Map<String, String> blogData, HttpServletRequest request, Integer blogId) {
+    @Transactional(rollbackFor = BlogBaseException.class, propagation = Propagation.REQUIRED, isolation = Isolation.READ_UNCOMMITTED)
+    private JSONObject updateBlogInternal(Map<String, String> blogData, HttpServletRequest request, Integer blogId) throws BlogBaseException {
         Passage passage = null;
         try {
             passage = passageDao.queryRecordById(blogId);
@@ -287,6 +308,12 @@ public class EditServiceImpl extends BaseOperation implements IEditService {
         } catch (BlogBaseException e) {
             logger.error("Updating blog failed!", e);
             return BlogCode.SERVER_BUSY.toJson();
+        }
+
+
+        if (!blogBackup.backupImmediatly(passage)) {
+            logger.error("Backuping the passage failed! title:" + passage.getTitle());
+            throw new BlogBaseException();
         }
 
         JSONObject result = BlogCode.SUCCESS.toJson();

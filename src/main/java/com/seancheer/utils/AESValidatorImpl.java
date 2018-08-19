@@ -1,5 +1,6 @@
 package com.seancheer.utils;
 
+import com.seancheer.common.BlogConfigImpl;
 import com.seancheer.common.BlogConstants;
 import com.seancheer.common.IBlogConfig;
 import com.seancheer.exception.BlogBaseException;
@@ -19,28 +20,17 @@ public class AESValidatorImpl implements IGodValidator{
 
 	private static final String KEY = "hellohelloo";
 
-	private static final String DEFAULT_SECRET_KEY = "seancheer'ssecretkey";
-
 	private static final boolean DEBUG_MODE = true;
-
-	private String secretKey = DEFAULT_SECRET_KEY;
 
 	private String blogPassword;
 
-	@Autowired
-	private IBlogConfig blogConfig;
+	private IBlogConfig blogConfig = BlogConfigImpl.getInstance();
 
 	/**
 	 * 默认的初始化方法，读取正确的secretkey
 	 */
 	public void init()
 	{
-		secretKey = blogConfig.getValue(BlogConstants.BLOG_AES_KEY);
-		if (StringUtils.isEmpty(secretKey))
-		{
-			secretKey = DEFAULT_SECRET_KEY;
-		}
-
 		blogPassword = blogConfig.getValue(BlogConstants.BLOG_GOD_PASSWORD);
 		if (StringUtils.isEmpty(blogPassword))
 		{
@@ -50,7 +40,7 @@ public class AESValidatorImpl implements IGodValidator{
 		}
 
         try {
-            blogPassword = AESHelper.decrypt(blogPassword,secretKey);
+            blogPassword = AESHelper.decrypt(blogPassword);
         } catch (BlogBaseException e) {
 		    throw new RuntimeException(e);
         }
@@ -84,7 +74,7 @@ public class AESValidatorImpl implements IGodValidator{
         }
 
         try {
-            return blogPassword.equals(AESHelper.decrypt(userKey,secretKey));
+            return blogPassword.equals(AESHelper.decrypt(userKey));
         } catch (BlogBaseException e) {
 	        logger.info("Decrypting user key failed!");
 	        return false;

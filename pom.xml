@@ -14,7 +14,6 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<jdk.version>1.8</jdk.version>
 		<jstl.version>1.2</jstl.version>
-		<junit.version>4.11</junit.version>
 		<logback.version>1.0.13</logback.version>
 		<slf4j.version>1.7.9</slf4j.version>
 		<spring.version>4.3.9.RELEASE</spring.version>
@@ -29,6 +28,8 @@
 		<hibernate.validator.version>5.2.1.Final</hibernate.validator.version>
 		<json.version>20171018</json.version>
 		<mail.version>1.4.4</mail.version>
+		<junit.version>4.10</junit.version>
+        <powermock.version>1.7.0</powermock.version>
 	</properties>
 
 	<dependencies>
@@ -153,7 +154,38 @@
 			<artifactId>mail</artifactId>
 			<version>${mail.version}</version>
 		</dependency>
-	</dependencies>
+
+
+		<!-- for test -->
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>${junit.version}</version>
+			<scope>test</scope>
+		</dependency>
+
+        <dependency>
+            <groupId>org.powermock</groupId>
+            <artifactId>powermock-api-mockito</artifactId>
+            <version>${powermock.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.powermock</groupId>
+            <artifactId>powermock-core</artifactId>
+            <version>${powermock.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.powermock/powermock-module-junit4 -->
+        <dependency>
+            <groupId>org.powermock</groupId>
+            <artifactId>powermock-module-junit4</artifactId>
+            <version>${powermock.version}</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
 
 
 
