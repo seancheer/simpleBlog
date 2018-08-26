@@ -9,6 +9,7 @@ import javax.servlet.http.HttpSession;
 
 import com.seancheer.common.BaseOperation;
 import com.seancheer.common.BlogCode;
+import com.seancheer.common.UrlConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,7 +47,7 @@ public class EditBlogController extends BaseOperation {
      *
      * @param key
      */
-    @RequestMapping(value = "/godCenter", method = RequestMethod.GET)
+    @RequestMapping(value = UrlConstants.GOD_CENTER, method = RequestMethod.GET)
     public void godCenter() {
         return;
 
@@ -57,7 +58,7 @@ public class EditBlogController extends BaseOperation {
      *
      * @param key
      */
-    @RequestMapping(value = "/newBlog", method = RequestMethod.GET)
+    @RequestMapping(value = UrlConstants.NEW_BLOG, method = RequestMethod.GET)
     public ModelAndView newBlog(HttpServletResponse response, HttpSession session) {
         List<Category1> allCategories = null;
 
@@ -82,7 +83,7 @@ public class EditBlogController extends BaseOperation {
      * @param postForm post的表单信息
      * @return 创建后的json
      */
-    @RequestMapping(value = "/createNewBlog", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
+    @RequestMapping(value = UrlConstants.CREATE_NEW_BLOG, method = RequestMethod.POST, produces = "application/json;charset=utf-8")
     @ResponseBody
     public String createNewBlog(HttpServletRequest request, HttpServletResponse response, HttpSession session,
                                 @RequestBody final Map<String,String> postForm) {
@@ -99,7 +100,7 @@ public class EditBlogController extends BaseOperation {
      * @param blogId
      * @return
      */
-    @RequestMapping(value = "/editBlog", method = RequestMethod.GET)
+    @RequestMapping(value = UrlConstants.EDIT_BLOG, method = RequestMethod.GET)
     public ModelAndView editBlog(HttpServletResponse response, HttpSession session,
                                  @RequestParam(value = "blogId", required = false) Integer blogId) {
         if (null == blogId || blogId < 0) {
@@ -119,7 +120,7 @@ public class EditBlogController extends BaseOperation {
      * @param blogId
      * @return
      */
-    @RequestMapping(value = "/deleteBlog", method = RequestMethod.DELETE, produces = "application/json;charset=utf-8")
+    @RequestMapping(value = UrlConstants.DELETE_BLOG, method = RequestMethod.DELETE, produces = "application/json;charset=utf-8")
     @ResponseBody
     public String createNewBlog(HttpServletRequest request, HttpServletResponse response, HttpSession session,
                                 @RequestParam final String blogId, @RequestParam(required = false)final Integer fakeDelete) {
@@ -156,7 +157,7 @@ public class EditBlogController extends BaseOperation {
      * @param postForm post的表单信息
      * @return
      */
-    @RequestMapping(value = "/updateBlog", params = {"blogId"}, method = RequestMethod.POST, produces = "application/json;charset=utf-8")
+    @RequestMapping(value = UrlConstants.UPDATE_BLOG, params = {"blogId"}, method = RequestMethod.POST, produces = "application/json;charset=utf-8")
     @ResponseBody
     public String createNewBlog(HttpServletRequest request, HttpServletResponse response, HttpSession session,
                                final String blogId, @RequestBody Map<String,String> postForm) {

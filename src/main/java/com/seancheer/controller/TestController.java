@@ -2,6 +2,7 @@ package com.seancheer.controller;
 
 import com.seancheer.backupservice.BackupFactory;
 import com.seancheer.backupservice.IBlogBackup;
+import com.seancheer.common.UrlConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,20 +27,14 @@ public class TestController {
 	@Autowired
 	private UserDao userDao;
 
-	@RequestMapping(value = "/backup", method = RequestMethod.GET)
+	@RequestMapping(value = UrlConstants.BACKUP, method = RequestMethod.GET)
 	public void Index() {
 		IBlogBackup backup = BackupFactory.getCurrentBackup();
         backup.triggerBgTask();
         logger.debug("Backuping failed!");
 	}
 
-	@RequestMapping(value = "/passage", method = RequestMethod.GET)
-	public void Passage() {
-		logger.debug("passage visited...");
-	}
-	
-
-	@RequestMapping(value = "/helloworld", method = RequestMethod.GET)
+	@RequestMapping(value = UrlConstants.HELLOWORLD, method = RequestMethod.GET)
 	public String Hello() {
 		logger.info("**************** Will query user from database...");
 		User user;
@@ -53,12 +48,5 @@ public class TestController {
 		logger.info("user.id:{}  user.name:{} user.type:{} user.isdel:{}", user.getId(), user.getName(),
 				user.getUserType(), user.getIsDel());
 		return "hello world";
-	}
-
-	@RequestMapping(value = "/another", method = RequestMethod.GET)
-	public void Another(Model model) {
-		model.addAttribute("hello world");
-		System.out.println("hello another controller.....");
-
 	}
 }

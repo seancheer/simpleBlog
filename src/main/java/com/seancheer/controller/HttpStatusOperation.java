@@ -1,6 +1,7 @@
 package com.seancheer.controller;
 
 import com.seancheer.common.BaseOperation;
+import com.seancheer.common.UrlConstants;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -17,7 +18,7 @@ public class HttpStatusOperation extends BaseOperation {
 	 * 
 	 * @param key
 	 */
-	@RequestMapping(value = "/error/500", method = RequestMethod.GET)
+	@RequestMapping(value = UrlConstants.ERROR_500_PAGE, method = RequestMethod.GET)
 	public void customInternalError() {
 		;
 	}
@@ -28,7 +29,7 @@ public class HttpStatusOperation extends BaseOperation {
 	 * 
 	 * @param key
 	 */
-	@RequestMapping(value = "/error/502", method = RequestMethod.GET)
+	@RequestMapping(value = UrlConstants.ERROR_502_PAGE, method = RequestMethod.GET)
 	public void customBadGateway() {
 		;
 	}
@@ -40,7 +41,7 @@ public class HttpStatusOperation extends BaseOperation {
 	 * 
 	 * @param key
 	 */
-	@RequestMapping(value = "/error/404", method = RequestMethod.GET)
+	@RequestMapping(value = UrlConstants.ERROR_404_PAGE, method = RequestMethod.GET)
 	public void customNotFound() {
 		;
 	}

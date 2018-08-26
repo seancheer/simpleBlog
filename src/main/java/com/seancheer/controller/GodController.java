@@ -5,6 +5,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
+import com.seancheer.common.UrlConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,7 +35,7 @@ public class GodController {
 	@Autowired
 	private IGodService godService;
 
-	@RequestMapping(value = "/needGod", method = RequestMethod.GET)
+	@RequestMapping(value = UrlConstants.NEED_GOD, method = RequestMethod.GET)
 	public void needGod(HttpServletRequest request) {
 		logger.info("Need god....");
 	}
@@ -44,7 +45,7 @@ public class GodController {
 	 * 
 	 * @param key
 	 */
-	@RequestMapping(value = "/godEntrance", method = RequestMethod.POST, produces="application/json; charset=UTF-8")
+	@RequestMapping(value = UrlConstants.GOD_ENTRANCE, method = RequestMethod.POST, produces="application/json; charset=UTF-8")
 	@ResponseBody
 	public String godEntrance(@RequestBody @Valid NeedGodReq needGodReq, HttpSession session, HttpServletResponse response) {
 		if (StringUtils.isEmpty(needGodReq.getKey())) {

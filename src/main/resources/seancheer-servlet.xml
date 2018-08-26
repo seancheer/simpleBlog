@@ -51,7 +51,7 @@
 	<!-- interceptor相关 -->
 	<mvc:interceptors>
 		<bean id="commonInterceptor"
-			class="com.seancheer.interceptor.CommonInterceptor"></bean>
+			class="com.seancheer.interceptor.ACLInterceptor"></bean>
 
 		<bean id="sessionInterceptor"
 			class="com.seancheer.interceptor.SessionInterceptor"></bean>

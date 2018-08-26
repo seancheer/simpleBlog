@@ -7,7 +7,8 @@ import org.springframework.web.servlet.AsyncHandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
 /**
- * 检查session的interceptor
+ * 检查session的interceptor，如果session过期，
+ * 那么让该用户重新登录，同时根据session
  * @author seancheer
  * @date 2018年4月12日
  */

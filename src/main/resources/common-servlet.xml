@@ -24,4 +24,8 @@
 
 	<bean id="blogApplicationContext" class="com.seancheer.utils.springmvc.BlogApplicationContext"/>
 
+	<bean id="handlerExceptionResolver" class="com.seancheer.utils.springmvc.CustomMappingExceptionResovler"/>
+
+    <bean id="pathAccessController" class="com.seancheer.acl.PathAccessControllerImpl" />
+
 </beans>

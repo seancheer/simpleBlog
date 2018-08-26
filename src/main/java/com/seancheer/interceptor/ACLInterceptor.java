@@ -3,16 +3,19 @@ package com.seancheer.interceptor;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.seancheer.acl.IPathAccessController;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.servlet.AsyncHandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
 /**
- * 普通的interceptor，如果传入的body或者param有问题，那么
- * 返回对应得错误，不再返回springmvc默认的栈信息错误
+ * 权限控制interceptor
  * @author seancheer
  * @date 2018年4月12日
  */
-public class CommonInterceptor implements AsyncHandlerInterceptor {
+public class ACLInterceptor implements AsyncHandlerInterceptor {
+	@Autowired
+    private IPathAccessController pathAccessController;
 
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)

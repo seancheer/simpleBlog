@@ -4,6 +4,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import com.seancheer.common.BaseOperation;
+import com.seancheer.common.UrlConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,7 +38,7 @@ public class BlogController extends BaseOperation {
      * @param session
      * @return
      */
-	@RequestMapping(value = "/getAllCategoies", method = RequestMethod.GET)
+	@RequestMapping(value = UrlConstants.GET_ALL_CATEGORIES, method = RequestMethod.GET)
 	@ResponseBody
 	public String getAllCategoies(HttpServletResponse response, HttpSession session) {
 		return blogService.getAllCategoies(response);
@@ -51,7 +52,7 @@ public class BlogController extends BaseOperation {
 	 * @param categoryIds
 	 * @return
 	 */
-	@RequestMapping(value = "/blogList", method = RequestMethod.GET)
+	@RequestMapping(value = UrlConstants.BLOG_LIST, method = RequestMethod.GET)
 	public ModelAndView blogList(HttpServletResponse response, HttpSession session,
 			@RequestParam(value = "page", required = false) Long page,
 			@RequestParam(value = "categoryId", required = false) String categoryIds) {
@@ -73,7 +74,7 @@ public class BlogController extends BaseOperation {
 	 * @param blogId
 	 * @return
 	 */
-	@RequestMapping(value = "/blog", method = RequestMethod.GET)
+	@RequestMapping(value = UrlConstants.BLOG_DETAIL, method = RequestMethod.GET)
 	public ModelAndView blogDetail(HttpServletResponse response, HttpSession session,
 			@RequestParam(value = "blogId", required = false) Integer blogId) {
 		if (null == blogId || blogId < 0)
