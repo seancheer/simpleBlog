@@ -8,14 +8,19 @@ import com.seancheer.dao.entity.Passage;
 import com.seancheer.exception.BlogBaseException;
 import com.seancheer.utils.AESHelper;
 import com.seancheer.utils.EmailUtils;
+import com.seancheer.utils.FileUtils;
+import com.seancheer.utils.springmvc.BlogApplicationContext;
 import org.hibernate.boot.Metadata;
 import org.hibernate.boot.MetadataSources;
-import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
+import org.hibernate.boot.registry.internal.StandardServiceRegistryImpl;
+import org.hibernate.boot.spi.MetadataImplementor;
+import org.hibernate.cfg.Configuration;
 import org.hibernate.service.ServiceRegistry;
 import org.hibernate.tool.hbm2ddl.SchemaExport;
 import org.hibernate.tool.schema.TargetType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 import org.springframework.util.StringUtils;
 
 import javax.mail.internet.AddressException;
@@ -25,6 +30,7 @@ import java.io.FileOutputStream;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.lang.reflect.Field;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -162,6 +168,16 @@ public class SimpleBlogBackupImpl implements IBlogBackup {
         return true;
     }
 
+    /**
+     * 触发后台任务，此处调试的时候会用到
+     *
+     * @return
+     */
+    @Override
+    public boolean triggerBgTask() {
+        backupAtFixedTime();
+        return true;
+    }
 
     /**
      * 长期备份，作为一个定时任务，该任务做以下事情：
@@ -169,45 +185,82 @@ public class SimpleBlogBackupImpl implements IBlogBackup {
      * 2 发送完成后，保存最近三次的压缩包，多余的进行删除。
      */
     private void backupAtFixedTime() {
-        //step 1: export sql
-        String filePath = exportSqlToPath();
-        //step 2: send newest file to some address
+        //step 1: export sql，如果需要导出数据，那么需要使用mysqldump功能
+        //String filePath = exportDDLSqlToPath();
+        //把immediately目录下面的json全部打包，然后发送到邮箱
+
+        String filePath = null;
         try {
+            //目前就先只对immediatly下面的文件进行打包即可
+            filePath = zipImmediatlyFile();
+            //step 2: send newest file to some address
             sendArchiveFile(filePath);
         } catch (BlogBaseException e) {
             logger.error("Sending archive failed! filePath:" + filePath, e);
         }
         //step 3: clean some archive files
         cleanArchive();
+        cleanArchive(".zip");
     }
 
     /**
-     * 导出数据库中的path到特定目录
+     * 导出数据库中的表结构到特定目录
      *
      * @return 文件路径
      */
-    private String exportSqlToPath() {
-        ServiceRegistry registry = new StandardServiceRegistryBuilder().configure().build();
-        Metadata metadata = new MetadataSources(registry).buildMetadata();
-        SchemaExport export = new SchemaExport();
-        export.setDelimiter(";");
-        export.setFormat(true);
-        export.setHaltOnError(true);
+    private String exportDDLSqlToPath() {
+        //Metadata metadata = new Meta
+        Metadata metadata = getMetadata();
+        String filePath = null;
 
-        Calendar calendar = Calendar.getInstance();
-        long nowMili = calendar.getTimeInMillis();
-        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss");
-        String formatDate = df.format(calendar.getTime());
-        //文件格式为formatDate-timeInMili.sql
-        String filePath = String.format("%s/%s-%s.sql", archivePath, formatDate, nowMili);
-        export.setOutputFile(filePath);
-        export.create(EnumSet.of(TargetType.DATABASE), metadata);
+        try {
+            SchemaExport export = new SchemaExport();
+            export.setDelimiter(";");
+            export.setFormat(true);
+            export.setHaltOnError(true);
+
+            Calendar calendar = Calendar.getInstance();
+            long nowMili = calendar.getTimeInMillis();
+            SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss");
+            String formatDate = df.format(calendar.getTime());
+            //文件格式为formatDate-timeInMili.sql
+            filePath = String.format("%s/%s-%s.sql", archivePath, formatDate, nowMili);
+            export.setOutputFile(filePath);
+            export.createOnly(EnumSet.of(TargetType.SCRIPT), metadata);
+        } finally {
+            ServiceRegistry serviceRegistry = ((MetadataImplementor) metadata).getMetadataBuildingOptions().getServiceRegistry();
+            ((StandardServiceRegistryImpl) serviceRegistry).destroy();
+        }
+
         return filePath;
     }
 
     /**
-     * 发送指定文件到特定路径
+     * 将即时备份目录下面的文件全部打包
      *
+     * @return
+     */
+    private String zipImmediatlyFile() throws BlogBaseException {
+        Calendar calendar = Calendar.getInstance();
+        long nowMili = calendar.getTimeInMillis();
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss");
+        String formatDate = df.format(calendar.getTime());
+        //将文件压缩到archivePath下
+        String zipFilePath = String.format("%s/%s-%s.zip", archivePath, formatDate, nowMili);
+        File[] files = new File(immediatlyPath).listFiles(new FilenameFilter() {
+            @Override
+            public boolean accept(File dir, String name) {
+                return name.endsWith(".json");
+            }
+        });
+
+        logger.info("File in immediatlyPath size:" + files.length);
+        FileUtils.zipFiles(zipFilePath, files);
+        return zipFilePath;
+    }
+
+    /**
+     * 发送指定文件到特定路径
      * @param filePath
      */
     public void sendArchiveFile(String filePath) throws BlogBaseException {
@@ -231,13 +284,22 @@ public class SimpleBlogBackupImpl implements IBlogBackup {
      * 存档文件格式为formatDate-timeInMili.sql
      */
     private void cleanArchive() {
+      cleanArchive(".sql");
+    }
+
+    /**
+     * 对archive文件夹进行清理
+     * @param fileSuffix 指定的文件后缀名
+     */
+    private void cleanArchive(String fileSuffix)
+    {
         FilenameFilter filter = new FilenameFilter() {
             @Override
             public boolean accept(File dir, String name) {
-                return name.endsWith(".sql");
+                return name.endsWith(fileSuffix);
             }
         };
-        cleanDirByFilter(archivePath,filter,BACKUP_ARCHIVE_FILE_NUM,".sql");
+        cleanDirByFilter(archivePath, filter, BACKUP_ARCHIVE_FILE_NUM, fileSuffix);
     }
 
     /**
@@ -278,8 +340,9 @@ public class SimpleBlogBackupImpl implements IBlogBackup {
             @Override
             public boolean accept(File dir, String name) {
                 return name.endsWith(".json");
-            }};
-        cleanDirByFilter(immediatlyPath,filter,IMMEDIATLY_FILE_NUM,".json");
+            }
+        };
+        cleanDirByFilter(immediatlyPath, filter, IMMEDIATLY_FILE_NUM, ".json");
     }
 
 
@@ -331,13 +394,13 @@ public class SimpleBlogBackupImpl implements IBlogBackup {
 
     /**
      * 根据filter，扫描path下面的所有文件，
+     *
      * @param path
      * @param filter
      * @param atLeastNum
-     * @param suffix 文件的后缀名，用来截取文件名中的时间戳
+     * @param suffix     文件的后缀名，用来截取文件名中的时间戳
      */
-    private void cleanDirByFilter(String path, FilenameFilter filter, int atLeastNum, String suffix )
-    {
+    private void cleanDirByFilter(String path, FilenameFilter filter, int atLeastNum, String suffix) {
         File file = new File(path);
         File[] files = file.listFiles(filter);
 
@@ -377,6 +440,38 @@ public class SimpleBlogBackupImpl implements IBlogBackup {
             if (!deletedFile.delete()) {
                 logger.error("Deleting file failed! fileName:" + deletedFile.getName());
             }
+        }
+    }
+
+    /**
+     * 通过sessionfactory获取到实际的Metadata
+     *
+     * @return
+     */
+    private Metadata getMetadata() {
+        LocalSessionFactoryBean sessionFactoryBean = BlogApplicationContext.getContext().getBean(LocalSessionFactoryBean.class);
+//        Properties properties = new Properties();
+//        properties.put("hibernate.hbm2ddl.auto", "create");
+//        properties.put("hibernate.dialect", "org.hibernate.dialect.MySQLDialect");
+//        properties.put("hibernate.id.new_generator_mappings", "true");
+//        properties.put("hibernate.connection.driver_class", "org.hsqldb.jdbc.JDBCDriver");
+//        properties.put("hibernate.connection.url", "jdbc:mysql://localhost:3306/my_blog?useUnicode=true&amp;characterEncoding=UTF-8");
+//        properties.put("hibernate.connection.username","root");
+//        properties.put("hibernate.connection.password","143900");
+//        StandardServiceRegistry standardRegistry = new StandardServiceRegistryBuilder().applySettings(properties).build();
+//        MetadataSources sources = new MetadataSources(standardRegistry);
+        Field configField = null;
+        try {
+            configField = sessionFactoryBean.getClass().getDeclaredField("configuration");
+            configField.setAccessible(true);
+            Configuration config = (Configuration) configField.get(sessionFactoryBean);
+            Field sourceField = Configuration.class.getDeclaredField("metadataSources");
+            sourceField.setAccessible(true);
+            MetadataSources sources = (MetadataSources) sourceField.get(config);
+            return sources.getMetadataBuilder(config.getStandardServiceRegistryBuilder().build()).build();
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            logger.error("Reflecting failed!", e);
+            throw new RuntimeException(e);
         }
     }
 

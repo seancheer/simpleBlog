@@ -43,6 +43,12 @@ public interface IBlogBackup {
     boolean backupImmediatly(Passage p);
 
     /**
+     * 触发后台任务
+     * @return
+     */
+    boolean triggerBgTask();
+
+    /**
      * 获取备份的目的地
      * @return
      */

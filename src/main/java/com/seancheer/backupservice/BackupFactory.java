@@ -18,7 +18,7 @@ public class BackupFactory {
     private static final String BLOG_BACKUP_METHOD = "blog.backup.method";
 
     //默认采用email的备份方式
-    private static final BackupMethod DEFAULT_BACKUP_METHOD = BackupMethod.valueOf("email");
+    private static final BackupMethod DEFAULT_BACKUP_METHOD = BackupMethod.valueOf("EMAIL");
 
     private static BackupMethod currentMethod = DEFAULT_BACKUP_METHOD;
 

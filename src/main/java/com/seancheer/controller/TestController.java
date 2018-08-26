@@ -1,5 +1,7 @@
 package com.seancheer.controller;
 
+import com.seancheer.backupservice.BackupFactory;
+import com.seancheer.backupservice.IBlogBackup;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,15 +20,17 @@ import com.seancheer.exception.BlogBaseException;
  * @author seancheer
  */
 @Controller
-public class HelloController {
-	private static Logger logger = LoggerFactory.getLogger(HelloController.class);
+public class TestController {
+	private static Logger logger = LoggerFactory.getLogger(TestController.class);
 
 	@Autowired
 	private UserDao userDao;
 
-	@RequestMapping(value = "/index", method = RequestMethod.GET)
+	@RequestMapping(value = "/backup", method = RequestMethod.GET)
 	public void Index() {
-		logger.info("index visited...");
+		IBlogBackup backup = BackupFactory.getCurrentBackup();
+        backup.triggerBgTask();
+        logger.debug("Backuping failed!");
 	}
 
 	@RequestMapping(value = "/passage", method = RequestMethod.GET)

@@ -22,4 +22,6 @@
 	<bean id="sessionManager" class="com.seancheer.session.SessionManager"
 		init-method="init" />
 
+	<bean id="blogApplicationContext" class="com.seancheer.utils.springmvc.BlogApplicationContext"/>
+
 </beans>

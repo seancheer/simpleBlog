@@ -2,6 +2,7 @@ package com.seancheer.utils;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.Arrays;
 import java.util.concurrent.TimeUnit;
 
@@ -22,6 +23,8 @@ public class IOUtils {
 	private static final int TMP_SIZE = 10;
 
 	private static final int BUF_SIZE = 10 * TMP_SIZE;
+
+	private static final int DEFAULT_SLEEP_MS = 100;
 
 	/**
 	 * 将inputstream转换为string，根据传入的charSet
@@ -49,7 +52,7 @@ public class IOUtils {
 		try {
 			while ((bytesRead = input.read(tmp)) >= 0) {
 				if (0 == bytesRead) {
-					TimeUnit.MILLISECONDS.sleep(100);
+					TimeUnit.MILLISECONDS.sleep(DEFAULT_SLEEP_MS);
 					continue;
 				}
 				
@@ -70,5 +73,30 @@ public class IOUtils {
 		}
 		return new String(result, 0, curSize, charSet);
 	}
-	
+
+
+	/**
+	 * 将in中的copy到out中，注意，该方法不负责inputstream的close，请自行进行close
+	 * @param out
+	 * @param in
+	 */
+	public static void copyStream(OutputStream out, InputStream in) throws IOException {
+        byte[] buffer = new byte[BUF_SIZE];
+        int bytesRead = 0;
+
+        try {
+            while ((bytesRead = in.read(buffer)) >= 0) {
+                if (0 == bytesRead) {
+                    TimeUnit.MILLISECONDS.sleep(DEFAULT_SLEEP_MS);
+                    continue;
+                }
+
+                out.write(buffer, 0, bytesRead);
+                out.flush();
+            }
+        } catch (InterruptedException e) {
+            logger.error("InterruptedException", e);
+            throw new IOException(e);
+        }
+    }
 }

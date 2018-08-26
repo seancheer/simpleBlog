@@ -3,13 +3,16 @@ package com.seancheer.backupservice;
 
 import com.seancheer.exception.BlogBaseException;
 import junit.framework.TestCase;
+import net.spy.memcached.MemcachedClient;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.PrintWriter;
+import java.net.InetSocketAddress;
 
 /**
  * 测试邮箱备份功能
@@ -52,6 +55,7 @@ public class TestSimpleBlogBackupImpl extends TestCase {
             writer.println("hello, this is a test....");
         } catch (FileNotFoundException e) {
             logger.error("Can not open the file");
+            textFile.delete();
             assertEquals(true, false);
             return;
         } finally {
@@ -66,9 +70,21 @@ public class TestSimpleBlogBackupImpl extends TestCase {
         } catch (BlogBaseException e) {
             logger.error("Sending e-mail failed!", e);
             assertEquals(true,false);
+            textFile.delete();
             return;
         }
 
+        textFile.delete();
         assertEquals(true,true);
+    }
+
+
+    /**
+     * 测试enum的用法，valueOf：里面的string必须为enum的名称字符串
+     */
+    @Test
+    public void testEnumValueof() throws IOException {
+        BackupMethod method = BackupMethod.valueOf("EMAIL");
+
     }
 }
