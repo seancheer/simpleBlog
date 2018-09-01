@@ -1,9 +1,11 @@
 package com.seancheer.controller;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import com.seancheer.common.BaseOperation;
+import com.seancheer.common.BlogConstants;
 import com.seancheer.common.UrlConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -53,13 +55,22 @@ public class BlogController extends BaseOperation {
 	 * @return
 	 */
 	@RequestMapping(value = UrlConstants.BLOG_LIST, method = RequestMethod.GET)
-	public ModelAndView blogList(HttpServletResponse response, HttpSession session,
-			@RequestParam(value = "page", required = false) Long page,
-			@RequestParam(value = "categoryId", required = false) String categoryIds) {
+	public ModelAndView blogList(HttpServletRequest request, HttpServletResponse response, HttpSession session,
+								 @RequestParam(value = "page", required = false) Long page,
+								 @RequestParam(value = "categoryId", required = false) String categoryIds) {
 		try {
 			ModelAndView view = blogService.getBlogList(response, page, categoryIds);
-			//TODO 以后需要根据session里面的信息来决定是否为god
-			view.addObject("isGod", true);
+			Boolean cookie_is_god = (Boolean)request.getAttribute(BlogConstants.COOKIE_IS_GOD);
+            Boolean cookie_is_expired = (Boolean)request.getAttribute(BlogConstants.COOKIE_IS_EXPIRED);
+
+            boolean isGod = false;
+            //如果这两个字段一个为true，一个为false，那么说明此时为God登录用户
+            if (null != cookie_is_god && null != cookie_is_expired && cookie_is_god && !cookie_is_expired)
+            {
+                isGod = true;
+            }
+
+			view.addObject("isGod", isGod);
 			return view;
 		} catch (BlogBaseException e) {
 			logger.error("GetBlogList failed!", e);

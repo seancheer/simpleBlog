@@ -21,6 +21,7 @@ import com.seancheer.session.SessionManager;
 import com.seancheer.utils.CookieGenerator;
 import com.seancheer.utils.IGodValidator;
 import com.seancheer.utils.TokenGenerator;
+import org.springframework.util.StringUtils;
 
 /**
  * 是否能够进入到博客编辑界面的实现类
@@ -97,5 +98,34 @@ public class GodServiceImpl implements IGodService {
 		session.setAttribute("token", token);
 		session.setAttribute("expiredAt", System.currentTimeMillis() + BlogConstants.TEN_DAY_IN_SECONDS * 1000);
 		sessionManager.putSession(String.valueOf(user.getId()), session);
+	}
+
+	/**
+	 * 判断是否为god
+	 * @param userId
+	 * @return
+	 */
+	@Override
+	public boolean isGod(Integer userId)
+	{
+		if (null == userId)
+		{
+			return false;
+		}
+
+		User user = null;
+		try {
+			user = userDao.queryRecordByName(adminUserName);
+		} catch (BlogBaseException e) {
+			logger.error("Querying user failed! userName:" + adminUserName, e);
+			return false;
+		}
+
+		if (null == user) {
+			logger.info("User[{}] does not exists!", adminUserName);
+			return false;
+		}
+
+		return userId.equals(user.getId());
 	}
 }

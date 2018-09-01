@@ -77,9 +77,11 @@
                             <div class="god-toolbar">
                                 <span>阅读(${blog.readCount})</span>
                                 <span>评论(${blog.commentCount})</span>
+                                <#if (isGod?? && isGod)>
                                 <a href="/editBlog?blogId=${blog.id}">编辑</a>
                                 <a id="delBlogFake${blog.id}" href="deleteBlog?blogId=${blog.id}">删除</a>
                                 <a id="delBlog${blog.id}" href="deleteBlog?blogId=${blog.id}&fakeDelete=1">彻底删除</a>
+                                </#if>
                             </div>
                             <div class='clear'></div>
                             <!-- .entry-meta -->
@@ -110,21 +112,23 @@
 					<@blogLoop/>
                     </div>
 
-                    <div class="col-md-4">
-                        <aside id="la-right" role="complementary">
-                            <div id="newBlogContainer" class="new-blog-container">
-                                <a id="newBlog" href="/newBlog">新的博客</a>
-                            </div>
-                            <div class="div-placeholder"></div>
-                        </aside>
-                    </div>
+                    <#if (isGod?? && isGod)>
+                        <div class="col-md-4">
+                            <aside id="la-right" role="complementary">
+                                <div id="newBlogContainer" class="new-blog-container">
+                                    <a id="newBlog" href="/newBlog">新的博客</a>
+                                </div>
+                                <div class="div-placeholder"></div>
+                            </aside>
+                        </div>
 
-                     <div class="col-md-4">
-                        <aside id="la-right" role="complementary">
-                                <a id="newBlog" href="/newBlog">通知</a>
-                            <div class="div-placeholder"></div>
-                        </aside>
-                    </div>
+                        <div class="col-md-4">
+                            <aside id="la-right" role="complementary">
+                                    <a id="newBlog" href="/newBlog">通知</a>
+                                <div class="div-placeholder"></div>
+                            </aside>
+                        </div>
+                    </#if>
 
                 </div>
             </div>

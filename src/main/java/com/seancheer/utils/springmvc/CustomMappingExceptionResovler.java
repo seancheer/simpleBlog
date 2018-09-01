@@ -1,6 +1,8 @@
 package com.seancheer.utils.springmvc;
 
 import org.springframework.core.annotation.Order;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.DefaultHandlerExceptionResolver;
 
@@ -18,5 +20,24 @@ public class CustomMappingExceptionResovler extends DefaultHandlerExceptionResol
     @Override
     public ModelAndView resolveException(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) {
         return super.resolveException(request, response, handler, ex);
+    }
+
+    /**
+     * 自定义返回页面，避免默认页面返回
+     * @param request
+     * @param response
+     * @param handler
+     * @param ex
+     * @return
+     */
+    @Override
+    protected ModelAndView doResolveException(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) {
+        if (ex instanceof HttpRequestMethodNotSupportedException)
+        {
+            response.setStatus(HttpStatus.METHOD_NOT_ALLOWED.value());
+            return new ModelAndView("redirect:/error/405");
+        }
+
+        return super.doResolveException(request, response, handler, ex);
     }
 }

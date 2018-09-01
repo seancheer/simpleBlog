@@ -36,6 +36,8 @@ public class UrlConstants {
 
     public static final String ERROR_404_PAGE = "/error/404";
 
+    public static final String ERROR_405_PAGE = "/error/405";
+
     public static final String BACKUP = "/backup";
 
     public static final String HELLOWORLD = "/helloworld";

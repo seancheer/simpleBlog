@@ -29,9 +29,9 @@
     <link rel='stylesheet' id='parent-theme-css-css' type='text/css' href='css/common.css' media='all' />
     <link rel='stylesheet' id='parent-theme-css-css' type='text/css' href='css/popup.css' media='all' />
 
-    <link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.3.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <script type="text/javascript" src="http://cdn.bootcss.com/jquery/1.11.1/jquery.min.js"></script>
-    <script type="text/javascript" src="http://cdn.bootcss.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="http://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
     <script type="text/javascript" src="js/common.js"></script>
     <script type="text/javascript" src="js/popupMsgBox.js"></script>
@@ -40,12 +40,7 @@
 </head>
 
 <style type="text/css">
-    body {
-        font-size: 100%;
-    }
-
-
-
+  
     #la-banner {
         min-height: 150px !important;
         background-repeat: no-repeat;

@@ -450,16 +450,6 @@ public class SimpleBlogBackupImpl implements IBlogBackup {
      */
     private Metadata getMetadata() {
         LocalSessionFactoryBean sessionFactoryBean = BlogApplicationContext.getContext().getBean(LocalSessionFactoryBean.class);
-//        Properties properties = new Properties();
-//        properties.put("hibernate.hbm2ddl.auto", "create");
-//        properties.put("hibernate.dialect", "org.hibernate.dialect.MySQLDialect");
-//        properties.put("hibernate.id.new_generator_mappings", "true");
-//        properties.put("hibernate.connection.driver_class", "org.hsqldb.jdbc.JDBCDriver");
-//        properties.put("hibernate.connection.url", "jdbc:mysql://localhost:3306/my_blog?useUnicode=true&amp;characterEncoding=UTF-8");
-//        properties.put("hibernate.connection.username","root");
-//        properties.put("hibernate.connection.password","143900");
-//        StandardServiceRegistry standardRegistry = new StandardServiceRegistryBuilder().applySettings(properties).build();
-//        MetadataSources sources = new MetadataSources(standardRegistry);
         Field configField = null;
         try {
             configField = sessionFactoryBean.getClass().getDeclaredField("configuration");

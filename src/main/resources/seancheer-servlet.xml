@@ -1,69 +1,82 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xmlns:p="http://www.springframework.org/schema/p"
-	xmlns:mvc="http://www.springframework.org/schema/mvc"
-	xmlns:context="http://www.springframework.org/schema/context"
-	xmlns:util="http://www.springframework.org/schema/util"
-	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd  
-            http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd  
-            http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd  
-            http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.0.xsd">
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.3.xsd
+            http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd
+            http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.3.xsd
+            http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.3.xsd">
 
-	<context:component-scan
-		base-package="com.seancheer.controller" />
-	<!-- configure the InternalResourceViewResolver -->
-	<bean
-		class="org.springframework.web.servlet.view.InternalResourceViewResolver"
-		id="internalResourceViewResolver">
-		<!-- 前缀 -->
-		<property name="prefix" value="/WEB-INF/jsp/" />
-		<!-- 后缀 -->
-		<property name="suffix" value=".jsp" />
-		<property name="order" value="1" />
-	</bean>
+    <context:component-scan
+            base-package="com.seancheer.controller"/>
+    <!-- configure the InternalResourceViewResolver -->
+    <bean
+            class="org.springframework.web.servlet.view.InternalResourceViewResolver"
+            id="internalResourceViewResolver">
+        <!-- 前缀 -->
+        <property name="prefix" value="/WEB-INF/jsp/"/>
+        <!-- 后缀 -->
+        <property name="suffix" value=".jsp"/>
+        <property name="order" value="1"/>
+    </bean>
 
-	<!-- 保证静态资源可以被jsp等网页访问到 -->
-	<mvc:resources mapping="/css/**" location="/WEB-INF/css/"></mvc:resources>
-	<mvc:resources mapping="/images/**"
-		location="/WEB-INF/images/"></mvc:resources>
-	<mvc:resources mapping="/js/**" location="/WEB-INF/js/"></mvc:resources>
-	<mvc:resources mapping="/fonts/**"
-		location="/WEB-INF/fonts/"></mvc:resources>
-	<mvc:annotation-driven />
+    <!-- 保证静态资源可以被jsp等网页访问到 -->
+    <mvc:resources mapping="/css/**" location="/WEB-INF/css/"></mvc:resources>
+    <mvc:resources mapping="/images/**"
+                   location="/WEB-INF/images/"></mvc:resources>
+    <mvc:resources mapping="/js/**" location="/WEB-INF/js/"></mvc:resources>
+    <mvc:resources mapping="/fonts/**"
+                   location="/WEB-INF/fonts/"></mvc:resources>
+    <mvc:annotation-driven/>
 
-<!-- 
-	<bean id="stringHttpMessageConverter"
-		class="org.springframework.http.converter.StringHttpMessageConverter">
-		<constructor-arg index="0" name="defaultCharset"
-			value="UTF-8" />
-		<property name="supportedMediaTypes">
-			<list>
-				<value>application/json</value>
-				<value>application/xml</value>
-				<value>text/xml</value>
-				<value>application/x-www-form-urlencoded</value>
-			</list>
-		</property>
-	</bean>
-	-->
+    <!--
+        <bean id="stringHttpMessageConverter"
+            class="org.springframework.http.converter.StringHttpMessageConverter">
+            <constructor-arg index="0" name="defaultCharset"
+                value="UTF-8" />
+            <property name="supportedMediaTypes">
+                <list>
+                    <value>application/json</value>
+                    <value>application/xml</value>
+                    <value>text/xml</value>
+                    <value>application/x-www-form-urlencoded</value>
+                </list>
+            </property>
+        </bean>
+        -->
 
 
-	<!-- interceptor相关 -->
-	<mvc:interceptors>
-		<bean id="commonInterceptor"
-			class="com.seancheer.interceptor.ACLInterceptor"></bean>
+    <!-- interceptor相关 -->
+    <mvc:interceptors>
+        <mvc:interceptor>
+            <!-- 拦截所有的请求，这个必须写在前面，也就是写在【不拦截】的上面 -->
+            <mvc:mapping path="/**" />
+            <!-- 但是排除下面这些，也就是不拦截请求 -->
+            <mvc:exclude-mapping path="/error/404" />
+            <mvc:exclude-mapping path="/error/405" />
+            <mvc:exclude-mapping path="/error/500" />
+            <mvc:exclude-mapping path="/error/502" />
+            <bean class="com.seancheer.interceptor.CookieInterceptor"/>
+        </mvc:interceptor>
 
-		<bean id="sessionInterceptor"
-			class="com.seancheer.interceptor.SessionInterceptor"></bean>
+        <mvc:interceptor>
+            <!-- 拦截所有的请求，这个必须写在前面，也就是写在【不拦截】的上面 -->
+            <mvc:mapping path="/**" />
+            <!-- 但是排除下面这些，也就是不拦截请求 -->
+            <mvc:exclude-mapping path="/error/404" />
+            <mvc:exclude-mapping path="/error/405" />
+            <mvc:exclude-mapping path="/error/500" />
+            <mvc:exclude-mapping path="/error/502" />
+            <bean class="com.seancheer.interceptor.ACLInterceptor"/>
+        </mvc:interceptor>
 
-		<!-- <mvc:interceptor> <mvc:mapping path="/test/number.do" /> -->
-		<!-- 定义在mvc:interceptor下面的表示是对特定的请求才进行拦截的 -->
-		<!-- <bean class="com.host.app.web.interceptor.LoginInterceptor" /> </mvc:interceptor> -->
-	</mvc:interceptors>
+    </mvc:interceptors>
 
-	<bean
-		class="org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping" />
-	<bean
-		class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter" />
+    <bean
+            class="org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping"/>
+    <bean
+            class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter"/>
 
 </beans>

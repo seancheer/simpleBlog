@@ -18,4 +18,11 @@ public interface IGodService {
 	 * @return
 	 */
 	String godEntrance(final NeedGodReq req, final HttpServletResponse response,final HttpSession session);
+
+	/**
+	 * 判断是否为god用户
+	 * @param userId
+	 * @return
+	 */
+	boolean isGod(Integer userId);
 }

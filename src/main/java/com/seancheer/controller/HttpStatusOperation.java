@@ -15,8 +15,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 public class HttpStatusOperation extends BaseOperation {
 	/**
 	 * 500
-	 * 
-	 * @param key
 	 */
 	@RequestMapping(value = UrlConstants.ERROR_500_PAGE, method = RequestMethod.GET)
 	public void customInternalError() {
@@ -26,8 +24,6 @@ public class HttpStatusOperation extends BaseOperation {
 	
 	/**
 	 * 502
-	 * 
-	 * @param key
 	 */
 	@RequestMapping(value = UrlConstants.ERROR_502_PAGE, method = RequestMethod.GET)
 	public void customBadGateway() {
@@ -38,11 +34,18 @@ public class HttpStatusOperation extends BaseOperation {
 	
 	/**
 	 * 404
-	 * 
-	 * @param key
 	 */
 	@RequestMapping(value = UrlConstants.ERROR_404_PAGE, method = RequestMethod.GET)
 	public void customNotFound() {
+		;
+	}
+
+
+	/**
+	 * 405
+	 */
+	@RequestMapping(value = UrlConstants.ERROR_405_PAGE, method = RequestMethod.GET)
+	public void notAllowed() {
 		;
 	}
 }

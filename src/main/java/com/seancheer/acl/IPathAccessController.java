@@ -12,5 +12,5 @@ public interface IPathAccessController {
      * @param path
      * @return
      */
-    boolean canAccess(String userId, String path);
+    boolean canAccess(Integer userId, String path);
 }

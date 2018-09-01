@@ -8,6 +8,7 @@ import java.util.concurrent.TimeUnit;
 
 import javax.servlet.http.HttpSession;
 
+import com.seancheer.utils.CookieEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.StringUtils;
@@ -52,6 +53,37 @@ public class SessionManager {
 		
 		return sessionMap.get(userId);
 	}
+
+    /**
+     * 验证用户传入的cookie在系统上是否已经有记录
+     * @param cookieEntity
+     * @return
+     */
+	public boolean invalidateCookie(CookieEntity cookieEntity)
+    {
+        if (null == cookieEntity)
+        {
+            return false;
+        }
+        String userId = cookieEntity.getUserId();
+        String token = cookieEntity.getToken();
+        String sId = cookieEntity.getSessionId();
+        if (StringUtils.isEmpty(userId) || StringUtils.isEmpty(token) || StringUtils.isEmpty(sId))
+        {
+            return false;
+        }
+
+        //通过cookie中的sessionid来获取对应的session
+        HttpSession session = sessionMap.get(userId);
+        if (null == session)
+        {
+            return false;
+        }
+
+        String userIdInCache = String.valueOf(session.getAttribute("userId"));
+        String tokenInCache = String.valueOf(session.getAttribute("token"));
+        return userId.equals(userIdInCache) && token.equals(tokenInCache) && sId.equals(session.getId());
+    }
 	
 	/**
 	 * 加入新的session，如果已经存在，那么直接进行覆盖。

@@ -29,13 +29,13 @@ body{
     line-height: 1.428;
     background-color: #F4F4F4;
     color: #656565;
-    overflow-x: hidden;
     font-size: 100%;
     display: block;
     min-height:100%;
     margin:0;
     padding:0;
     position:relative;
+    overflow-x: hidden;
 }
 
 html{height:100%;}

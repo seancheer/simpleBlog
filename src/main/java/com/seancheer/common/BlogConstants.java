@@ -59,6 +59,14 @@ public class BlogConstants {
     //中国的时区
     public static final String CHINA_TIME_ZONE = "GMT+8:00";
 
+    public static final String COOKIE_IS_EXPIRED = "cookie_is_expired";
+
+    //是否为管理员类型的session
+    public static final String COOKIE_IS_GOD = "cookie_is_god";
+
+    //从cookie中读取的entity
+    public static final String COOKIE_ENTITY = "cookie_entity";
+
     public static String BACKUP_LOCAL_PATH = "/home/seancheer/";
 
     static {
